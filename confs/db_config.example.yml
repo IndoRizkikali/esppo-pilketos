@@ -1,0 +1,6 @@
+database_config:
+ - host: "localhost" # Nama host/Alamat IP server basis data MySQL/MariaDB
+ - port: 3306 # Port yang digunakan oleh server basis data
+ - database: "sppoe" # Nama basis data yang digunakan
+ - username: "root" # Username untuk mengakses basis data
+ - password: "" # Password untuk mengakses basis data

@@ -1,0 +1,15 @@
+{
+    "name": "rizkiyandri/esppo",
+    "description": "Sistem Penyelenggaraan Pemilihan OSIS Elektronik",
+    "type": "project",
+    "license": "Apache-2.0",
+    "require": {
+        "phpoffice/phpspreadsheet": "^4.4",
+        "phpoffice/phpword": "^1.4",
+        "clean-composer-packages/pdf-js": "^5.3",
+        "khanamiryan/qrcode-detector-decoder": "^2.0",
+        "bacon/bacon-qr-code": "^3.0",
+        "tecnickcom/tcpdf": "^6.10",
+        "setasign/fpdf": "^1.8"
+    }
+}

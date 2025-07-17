@@ -1,0 +1,24 @@
+school_config:
+ - nama_sekolah: "SMA Negeri 1 Bati-Bati" # Nama sekolah - Gunakan nama resmi
+ - npsn_sekolah: 30300701 # Nomor Pokok Sekolah Nasional (NPSN) - Jika ada
+ - alamat_sekolah:
+   - alamat: "Jl. A. Yani, KM. 33.3"
+   - kecamatan: "Bati-Bati"
+   - dati_2: "Kabupaten Tanah Laut" # Daerah Tingkat II - Kabupaten/Kota
+   - dati_1: "Kalimantan Selatan" # Daerah Tingkat I - Provinsi/Otoritas IKN
+   - kode_pos: 70852
+   - no_telepon: 05114779299 # Nomor telepon resmi sekolah
+   - email_sekolah: "sman1bati.bati@gmail.com" # Email resmi sekolah
+   - website_sekolah: "https://www.sman1batibati.sch.id" # Website resmi sekolah
+ - kepala_sekolah:
+   - nama: "Taslim, S.Pd., M.Pd." # Nama Kepala Sekolah - Dengan gelar
+   - nip_kepsek: 197106021998021005 # Nomor Induk Pegawai (NIP) Kepala Sekolah - Hanya untuk Sekolah berstatus Negeri
+ - tahun_ajaran:
+   - tahun_ajaran: "2025/2026"
+   - semester: "Ganjil"
+ - logo:
+   # Logo sekolah dan OSIS harus dalam format PNG atau JPG
+   # Logo-logo dimuat dari folder assets/imgs/sekolah/
+   # Simpan logo-logo tersebut dalam folder tersebut dan masukkan nama file tiap logo di sini
+   - logo_sekolah: "Logo_SMABAT_Besar.png" # Logo resmi sekolah, jika tidak ada, kosongkan - fallback otomatis ke logo Kemdikdasmen
+   - logo_osis: "Logo_OSIS_SMABAT.png" # Logo OSIS, jika tidak ada, kosongkan - fallback otomatis ke logo OSIS nasional

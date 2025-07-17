@@ -1,0 +1,10 @@
+# crypto_config.example.yml
+# File ini berisi contoh konfigurasi untuk enkripsi data sensitif
+# Edit file ini dengan kunci enkripsi yang sebenarnya sebelum digunakan dan simpan ulang sebagai crypto_config.yml
+crypto_config:
+ - aes_keys:
+   # Kunci simetris AES untuk enkripsi data sensitif
+   # voter_data_encrypting_key untuk mengenkripsi data ID pemilih yang disimpan ke basis data
+   # api_access_protection_key untuk melindungi akses API dengan mengenkripsi data pribadi
+   - voter_data_encrypting_key: "0000000000000000000000000000000000000000000=" # Base64 encoded - AES 256-bit key, 44 karakter
+   - api_access_protection_key: "0000000000000000000000000000000000000000000=" # Base64 encoded - AES 256-bit key, 44 karakter
