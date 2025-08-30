@@ -1,21 +1,26 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Data Sekolah
+ * pusminlihdu/pengelola/data_sekolah.php
  *
- * Halaman untuk menampilkan Data Sekolah.
- * Di v2.0.0, halaman ini bersifat read-only. Data diambil dari school_config.yml.
+ * File ini menampilkan informasi lengkap tentang sekolah, termasuk alamat,
+ * kepala sekolah, tahun ajaran, dan logo. Data ini diambil dari file konfigurasi
+ * `confs/school_config.yml` dan ditampilkan dalam format yang mudah dibaca.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
-// Helper sudah dimuat oleh loader (index.php).
-// Kita bisa langsung memanggil fungsi dari schooldata_helper.php.
-
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DAN PEMROSESAN DATA KONFIGURASI
 // -----------------------------------------------------------------------------
 
+// Diasumsikan bahwa seluruh file helper sudah dimuat sebelumnya oleh index.php
+
+// Ambil konfigurasi sekolah dari file YAML
 $school_config = get_school_config();
 
 /**
@@ -50,7 +55,6 @@ $full_address = implode(', ', [
 $full_address .= ', ' . ($alamat_data['dati_2'] ?? '');
 $full_address .= ', ' . ($alamat_data['dati_1'] ?? '');
 $full_address .= ' ' . ($alamat_data['kode_pos'] ?? '');
-
 ?>
 
 <div class="row">

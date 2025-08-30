@@ -1,8 +1,17 @@
 <?php
-// helpers/db_helper.php
-
 /**
- * File ini berisi fungsi-fungsi helper untuk berinteraksi dengan basis data.
+ * e-SPPO - Fungsi Helper Basis Data
+ * helpers/db_helper.php
+ * 
+ * File ini berisi fungsi-fungsi helper untuk berinteraksi dengan basis data,
+ * seperti mendapatkan koneksi ke basis data MariaDB/MySQL, membaca konfigurasi,
+ * dan menangani kesalahan koneksi.
+ *
+ * @version 2.0.0
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
+ * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
 // Sertakan pustaka untuk parsing YAML jika tidak menggunakan ekstensi PECL.

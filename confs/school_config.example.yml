@@ -1,24 +1,40 @@
+# school_config.example.yml
+# File ini berisi contoh konfigurasi untuk informasi sekolah
+# Edit file ini dengan informasi sekolah yang sebenarnya sebelum digunakan dan simpan ulang sebagai school_config.yml
+# Walaupun tidak ada informasi rahasia, pastikan untuk menjaga akses ke file ini!
+# Disclaimer: data sekolah yang digunakan di sini adalah data sekolah sebenarnya, sehingga tidak boleh digunakan untuk tujuan lain
 school_config:
- - nama_sekolah: "SMA Negeri 1 Bati-Bati" # Nama sekolah - Gunakan nama resmi
+ - nama_sekolah: "SMA Negeri 1 Bati-Bati" # Nama lengkap sekolah - Gunakan nama resmi
  - npsn_sekolah: 30300701 # Nomor Pokok Sekolah Nasional (NPSN) - Jika ada
  - alamat_sekolah:
-   - alamat: "Jl. A. Yani, KM. 33.3"
-   - kecamatan: "Bati-Bati"
-   - dati_2: "Kabupaten Tanah Laut" # Daerah Tingkat II - Kabupaten/Kota
-   - dati_1: "Kalimantan Selatan" # Daerah Tingkat I - Provinsi/Otoritas IKN
-   - kode_pos: 70852
+   - alamat: "Jl. A. Yani, KM. 33.3" # Alamat lengkap sekolah - Ikuti konvensi yang digunakan
+   - kecamatan: "Bati-Bati" # Kecamatan tempat sekolah
+   - dati_2: "Kabupaten Tanah Laut" # Daerah Tingkat II - Kabupaten/Kota tempat sekolah
+   - dati_1: "Kalimantan Selatan" # Daerah Tingkat I - Provinsi/Otoritas IKN tempat sekolah
+   - kode_pos: 70852 # Kode Pos - Gunakan kode pos yang sesuai
    - no_telepon: 05114779299 # Nomor telepon resmi sekolah
    - email_sekolah: "sman1bati.bati@gmail.com" # Email resmi sekolah
    - website_sekolah: "https://www.sman1batibati.sch.id" # Website resmi sekolah
  - kepala_sekolah:
-   - nama: "Taslim, S.Pd., M.Pd." # Nama Kepala Sekolah - Dengan gelar
-   - nip_kepsek: 197106021998021005 # Nomor Induk Pegawai (NIP) Kepala Sekolah - Hanya untuk Sekolah berstatus Negeri
+   - nama: "Taslim, S.Pd., M.Pd." # Nama Lengkap Kepala Sekolah - Dengan gelar
+   - nip_kepsek: 197106021998021005 # Nomor Induk Pegawai (NIP) Kepala Sekolah - Hanya berlaku jika beliau berstatus ASN (PNS/PPPK)
  - tahun_ajaran:
-   - tahun_ajaran: "2025/2026"
-   - semester: "Ganjil"
+   - tahun_ajaran: "2025/2026" # Tahun ajaran yang sedang berjalan - Format: YYYY/YYYY
+   - semester: "Ganjil" # Semester yang sedang berjalan - Ganjil/Genap
  - logo:
    # Logo sekolah dan OSIS harus dalam format PNG atau JPG
    # Logo-logo dimuat dari folder assets/imgs/sekolah/
    # Simpan logo-logo tersebut dalam folder tersebut dan masukkan nama file tiap logo di sini
-   - logo_sekolah: "Logo_SMABAT_Besar.png" # Logo resmi sekolah, jika tidak ada, kosongkan - fallback otomatis ke logo Kemdikdasmen
-   - logo_osis: "Logo_OSIS_SMABAT.png" # Logo OSIS, jika tidak ada, kosongkan - fallback otomatis ke logo OSIS nasional
+   - logo_sekolah: "Logo_SMABAT_Besar.png" # Logo resmi sekolah, jika tidak ada, kosongkan - fallback otomatis ke logo Kemdikdasmen dengan nama "placeholder_sekolah.png"
+   - logo_osis: "Logo_OSIS_SMABAT.png" # Logo OSIS, jika tidak ada, kosongkan - fallback otomatis ke logo OSIS nasional dengan nama "placeholder_osis.png"
+ - url_akses_esppo: # Alamat URL HTTP/HTTPS untuk akses ke aplikasi eSPPO
+   - url_sse: # Alamat URL Web untuk mengakses Surat Suara Elektronik (SSE) eSPPO
+     # Isi dengan alamat awal URL dan folder yang digunakan untuk mengakses SSE, karena sistem akan menambahkan path SSE secara otomatis 
+     - "https://192.168.0.11/esppo/"
+     - "https://192.168.1.51/esppo/"
+     - "https://osis.sman1batibati.sch.id/esppo/"
+   - url_pspo: # Alamat URL Web untuk mengakses Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) eSPPO
+     # Isi dengan alamat awal URL dan folder yang digunakan untuk mengakses Pusminlihdu, karena sistem akan menambahkan path Pusminlihdu secara otomatis
+     - "https://192.168.0.11/esppo/"
+     - "https://192.168.1.51/esppo/"
+     - "https://osis.sman1batibati.sch.id/esppo/"

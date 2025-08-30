@@ -1,16 +1,28 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk menambah data kandidat baru.
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Tambah Kandidat
+ * pusminlihdu/pengelola/tambah_kandidat.php
+ * 
+ * Halaman ini menangani proses penambahan kandidat baru ke dalam sistem.
+ * Pengelola dapat menambahkan kandidat dengan mengisi formulir yang berisi
+ * data calon, visi, misi, dan foto kandidat.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DATA PENDUKUNG & PEMROSESAN FORM
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $success_message = '';
 $error_message = '';
 $election_settings = null;

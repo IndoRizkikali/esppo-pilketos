@@ -1,16 +1,25 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman Login untuk Pengelola dan Pengawas.
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Login
+ * pusminlihdu/login.php
+ * 
+ * File ini menangani proses login untuk administrator Pusminlihdu.
+ * Ini mencakup validasi nama akun dan kata sandi, penanganan sesi,
+ * dan pengalihan ke halaman utama berdasarkan peran setelah login
+ * berhasil.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. INISIALISASI
 // -----------------------------------------------------------------------------
+
+// Menggunakan nama sesi yang konsisten dengan aplikasi Pusminlihdu
 session_name('eSPPO_PAPT_V2');
 session_start();
 
@@ -20,20 +29,29 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
     exit();
 }
 
+// Sertakan file konfigurasi dan helper yang diperlukan
 require_once __DIR__ . '/../helpers/db_helper.php';
 require_once __DIR__ . '/../helpers/schooldata_helper.php';
 require_once __DIR__ . '/../helpers/crypto_helper.php';
 
+// Tetapkan versi aplikasi
 define('ESPPO_VERSION', '2.0.0');
+
 $error_message = '';
+
+// Ambil nama sekolah dari konfigurasi
 $school_name = htmlspecialchars(get_school_data('nama_sekolah', 'Sekolah Penyelenggara'));
 
+// -----------------------------------------------------------------------------
 // 2. PROSES LOGIN
 // -----------------------------------------------------------------------------
+
+// Jika ada permintaan POST, proses login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['nama_akun_admin'] ?? '');
     $password = $_POST['kata_sandi_akun_admin'] ?? '';
 
+    // Periksa apakah nama akun dan kata sandi tidak kosong
     if (empty($username) || empty($password)) {
         $error_message = "Nama Akun dan Kata Sandi tidak boleh kosong.";
     } else {
@@ -47,8 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->close();
 
             if ($admin) {
+                // Periksa status akun
                 if ($admin['status_akun_admin'] !== 'DIAKTIFKAN') {
                     $error_message = "Akun ini sedang tidak aktif. Hubungi administrator.";
+                // Jika akun aktif, verifikasi kata sandi
                 } elseif (verify_password($password, $admin['kata_sandi_akun_admin'])) {
                     // Login Berhasil!
                     session_regenerate_id(true); // Mencegah session fixation
@@ -66,9 +86,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: index.php"); // Arahkan ke perute utama
                     exit();
                 } else {
+                    // Jika kata sandi salah
                     $error_message = "Nama Akun atau Kata Sandi salah.";
                 }
             } else {
+                // Jika nama akun tidak ditemukan
                 $error_message = "Nama Akun atau Kata Sandi salah.";
             }
         } catch (mysqli_sql_exception $e) {
@@ -78,8 +100,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -104,6 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   </style>
 </head>
+
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="card card-outline card-primary">
@@ -157,4 +182,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- AdminLTE App -->
 <script src="../uis/adminlte-3.2.0/dist/js/adminlte.min.js"></script>
 </body>
+
 </html>

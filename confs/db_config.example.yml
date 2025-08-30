@@ -1,6 +1,12 @@
+# db_config.example.yml
+# File ini berisi contoh konfigurasi untuk koneksi basis data
+# Edit file ini dengan informasi koneksi yang sebenarnya sebelum digunakan dan simpan ulang sebagai db_config.yml
+# Jika menggunakan basis data lokal, pastikan bahwa nama basis data, username, dan password sudah sesuai
+# Jika menggunakan basis data server eksternal, pastikan untuk mengatur host dan port dengan benar, selain tentunya nama basis data, username, dan password
+# Jangan mengunggah file db_config.yml ke repositori publik dengan informasi koneksi yang sebenarnya!
 database_config:
  - host: "localhost" # Nama host/Alamat IP server basis data MySQL/MariaDB
  - port: 3306 # Port yang digunakan oleh server basis data
  - database: "sppoe" # Nama basis data yang digunakan
- - username: "root" # Username untuk mengakses basis data
- - password: "" # Password untuk mengakses basis data
+ - username: "root" # Username/Nama Pengguna untuk mengakses basis data
+ - password: "" # Password/Kata Sandi untuk mengakses basis data

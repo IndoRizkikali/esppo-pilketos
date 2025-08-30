@@ -1,15 +1,20 @@
 <?php
 /**
- * e-SPPO - Surat Suara Elektronik (SSE)
+ * e-SPPO - Surat Suara Elektronik (SSE) - Halaman Terima Kasih
+ * sse/vote_successful.php
  *
- * Halaman ini ditampilkan setelah pemilih berhasil mengirimkan suaranya.
- * Sesi pengguna sudah dihancurkan sebelum mencapai halaman ini.
+ * Halaman ini ditampilkan setelah pemilih berhasil merekam suaranya.
+ * Menampilkan pesan terima kasih dan informasi tentang pemilihan yang telah dilakukan.
+ * Halaman ini juga menyediakan tautan untuk kembali ke halaman login.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. INISIALISASI
 // -----------------------------------------------------------------------------
 
@@ -21,10 +26,11 @@ define('ESPPO_VERSION', '2.0.0');
 
 // Ambil nama sekolah untuk ditampilkan
 $school_name = htmlspecialchars(get_school_data('nama_sekolah', 'Sekolah Penyelenggara'));
-
 ?>
+
 <!doctype html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,7 +42,7 @@ $school_name = htmlspecialchars(get_school_data('nama_sekolah', 'Sekolah Penyele
     <!-- Bootstrap 5 CSS -->
     <link href="../uis/bootstrap-5.3.7/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Fonts: Inter & Poppins -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
@@ -134,8 +140,8 @@ $school_name = htmlspecialchars(get_school_data('nama_sekolah', 'Sekolah Penyele
         }
     </style>
 </head>
-<body>
 
+<body>
     <div class="card success-card text-center">
         <div class="card-body">
             <div class="success-icon">
@@ -159,4 +165,5 @@ $school_name = htmlspecialchars(get_school_data('nama_sekolah', 'Sekolah Penyele
     <!-- Bootstrap 5 JS (opsional untuk halaman statis ini, tapi baik untuk konsistensi) -->
     <script src="../uis/bootstrap-5.3.7/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

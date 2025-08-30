@@ -1,16 +1,27 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk mengelola (Tambah, Edit, Hapus) Data Konstituensi.
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Edit Konstituensi
+ * pusminlihdu/pengelola/edit_konstituensi.php
+ * 
+ * Halaman ini digunakan untuk mengelola data konstituensi pemilih,
+ * termasuk menambah, mengubah, dan menghapus konstituensi.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. LOGIKA PEMROSESAN FORM (CRUD ACTIONS)
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $success_message = '';
 $error_message = '';
 
@@ -95,8 +106,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
+// -----------------------------------------------------------------------------
 // 2. PENGAMBILAN DATA UNTUK FORM DROPDOWN
 // -----------------------------------------------------------------------------
+
 $constituencies_for_form = [];
 try {
     $result = $db->query("SELECT kode_konstituensi, nama_konstituensi, tipe_konstituensi, status_konstituensi FROM data_konstituensi ORDER BY kode_konstituensi ASC");
@@ -106,7 +119,6 @@ try {
 } catch (mysqli_sql_exception $e) {
     $error_message = "Gagal memuat data untuk form. Kesalahan: " . $e->getMessage();
 }
-
 ?>
 
 <!-- Tampilkan pesan sukses atau error -->

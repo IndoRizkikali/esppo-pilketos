@@ -1,15 +1,32 @@
 <?php
 /**
- * e-SPPO - Surat Suara Elektronik (SSE)
+ * e-SPPO - Surat Suara Elektronik (SSE) - Proses Pemungutan Suara
+ * sse/ballot_process.php
  *
+ * Skrip ini menangani proses pemungutan suara untuk pemilih yang telah login.
+ * Skrip ini melakukan langkah-langkah berikut:
+ * 1. Memastikan pemilih sudah login dan mengirimkan pilihan kandidat.
+ * 2. Memulai transaksi database untuk memastikan atomisitas.
+ * 3. Mengunci baris pemilih untuk mencegah pemungutan suara ganda.
+ * 4. Mengambil dan mengenkripsi ID pemilih.
+ * 5. Mengambil nomor urut kandidat yang dipilih.
+ * 6. Menyimpan suara ke tabel `data_suara`.
+ * 7. Memperbarui status pemilih menjadi "SUDAH_MEMILIH".
+ * 8. Melakukan commit transaksi jika semua langkah berhasil.
+ * 9. Menangani kesalahan dengan rollback transaksi jika terjadi masalah.
+ * 10. Menghancurkan sesi pemilih setelah suara berhasil dikirim.
+ * 
  * KRITIKAL: Skrip ini memproses, mengenkripsi, dan menyimpan suara pemilih.
  * Skrip ini dirancang untuk menjadi atomik dan aman untuk mencegah pemungutan suara ganda.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. INISIALISASI & PENJAGA KEAMANAN (GUARDS)
 // -----------------------------------------------------------------------------
 
@@ -38,6 +55,7 @@ if (empty($_POST['pilihan_kandidat'])) {
     exit('Tidak ada pilihan yang dibuat.');
 }
 
+// -----------------------------------------------------------------------------
 // 2. PROSES INTI (DALAM TRANSAKSI DATABASE)
 // -----------------------------------------------------------------------------
 
@@ -133,6 +151,7 @@ try {
     exit();
 }
 
+// -----------------------------------------------------------------------------
 // 3. PEMBERSIHAN DAN REDIREKSI
 // -----------------------------------------------------------------------------
 
@@ -143,5 +162,4 @@ session_destroy();
 // Arahkan ke halaman sukses.
 header('Location: vote_successful.php');
 exit();
-
 ?>

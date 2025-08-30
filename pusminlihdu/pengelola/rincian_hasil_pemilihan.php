@@ -1,16 +1,28 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk menampilkan rincian hasil pemilihan per konstituensi.
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Rincian Hasil Pemilihan
+ * pusminlihdu/pengelola/rincian_hasil_pemilihan.php
+ * 
+ * Halaman ini menampilkan rincian hasil pemilihan berdasarkan konstituensi yang dipilih.
+ * Pengelola dapat melihat statistik pemilihan seperti total DPT, jumlah suara masuk,
+ * tingkat partisipasi, dan perolehan suara per kandidat.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DATA & PEMROSESAN FILTER
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $all_constituencies = [];
 $stats = [
     'total_dpt' => 0,
@@ -144,3 +156,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <?php endif; ?>
+
+<!-- Skrip untuk inisialisasi Select2 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Inisialisasi Select2
+    $('.select2').select2({ theme: 'bootstrap4' });
+    });
+</script>

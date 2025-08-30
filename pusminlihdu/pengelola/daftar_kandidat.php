@@ -1,20 +1,32 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk menampilkan Daftar Kandidat.
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Daftar Kandidat
+ * pusminlihdu/pengelola/daftar_kandidat.php
+ * 
+ * Halaman ini menampilkan daftar kandidat yang telah ditambahkan ke dalam sistem.
+ * Pengelola dapat melihat informasi dasar kandidat seperti nomor urut, nama calon,
+ * visi, misi, dan foto kandidat.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DATA
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $candidates = [];
 $error_message = '';
+
 try {
-    // $db sudah tersedia dari loader (index.php)
     // Query ini menggabungkan data kandidat dengan nama konstituensi untuk kedua calon
     $query = "
         SELECT 
@@ -43,7 +55,6 @@ try {
 } catch (mysqli_sql_exception $e) {
     $error_message = "Gagal memuat data kandidat. Kesalahan: " . $e->getMessage();
 }
-
 ?>
 
 <!-- Tampilkan pesan error jika ada -->
@@ -85,7 +96,7 @@ try {
                                  class="img-fluid rounded" 
                                  alt="Foto Kandidat"
                                  style="max-height: 180px; object-fit: cover;"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/150x180/e0e0e0/757575?text=Foto';">
+                                 onerror="this.onerror=null; this.src='https://placehold.co/240x240/e0e0e0/757575?text=Foto%20kandidat';">
                         </div>
                         <!-- Kolom Nama & Konstituensi -->
                         <div class="col-md-4">

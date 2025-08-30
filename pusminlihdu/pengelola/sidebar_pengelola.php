@@ -186,11 +186,11 @@ $laporanPages = ['cetak_dpt', 'cetak_kartu_dpt', 'cetak_panduan_akses', 'cetak_d
             <p>Cetak Dokumen <i class="fas fa-angle-left right"></i></p>
           </a>
           <ul class="nav nav-treeview">
-            <li class="nav-item"><a href="index.php?page=cetak_dpt" class="nav-link <?= isMenuItemActive('cetak_dpt', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>Statistik & DPT</p></a></li>
+            <li class="nav-item"><a href="index.php?page=cetak_dpt" class="nav-link <?= isMenuItemActive('cetak_dpt', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>Statistik Pemilih & DPT</p></a></li>
             <li class="nav-item"><a href="index.php?page=cetak_kartu_dpt" class="nav-link <?= isMenuItemActive('cetak_kartu_dpt', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>Kartu Pemilih</p></a></li>
             <li class="nav-item"><a href="index.php?page=cetak_panduan_akses" class="nav-link <?= isMenuItemActive('cetak_panduan_akses', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>Panduan & QR Code Akses</p></a></li>
             <li class="nav-item"><a href="index.php?page=cetak_daftar_kandidat" class="nav-link <?= isMenuItemActive('cetak_daftar_kandidat', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>Daftar Kandidat</p></a></li>
-            <li class="nav-item"><a href="index.php?page=cetak_laporan_pemilhan" class="nav-link <?= isMenuItemActive('cetak_laporan_pemilhan', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>Laporan & Hasil Pemilihan</p></a></li>
+            <li class="nav-item"><a href="index.php?page=cetak_laporan_pemilihan" class="nav-link <?= isMenuItemActive('cetak_laporan_pemilhan', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>Laporan & Hasil Pemilihan</p></a></li>
             <li class="nav-item"><a href="index.php?page=cetak_kehadiran" class="nav-link <?= isMenuItemActive('cetak_kehadiran', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>Laporan Kehadiran</p></a></li>
             <li class="nav-item"><a href="index.php?page=cetak_sse_ljk" class="nav-link <?= isMenuItemActive('cetak_sse_ljk', $currentPage) ?>"><i class="far fa-circle nav-icon"></i><p>LJK SSE (OMR)</p></a></li>
           </ul>

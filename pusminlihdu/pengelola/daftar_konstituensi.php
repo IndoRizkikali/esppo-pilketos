@@ -1,20 +1,34 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk menampilkan Daftar Konstituensi.
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Daftar Konstituensi
+ * pusminlihdu/pengelola/daftar_konstituensi.php
+ * 
+ * Daftar konstituensi pemilih yang dikelola oleh panitia pemilihan.
+ * Daftar konstituensi ini menampilkan informasi dasar seperti kode, nama,
+ * tipe, dan status konstituensi. Data konstituensi digunakan untuk
+ * mengelompokan pemilih berdasarkan kategori atau kriteria tertentu,
+ * serta menjadi data referensi untuk pengusulan kandidat.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DATA
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $constituencies = [];
 $error_message = '';
+
 try {
-    // $db sudah tersedia dari loader (index.php)
     $result = $db->query("SELECT * FROM data_konstituensi ORDER BY kode_konstituensi ASC");
     if ($result) {
         $constituencies = $result->fetch_all(MYSQLI_ASSOC);
@@ -22,7 +36,6 @@ try {
 } catch (mysqli_sql_exception $e) {
     $error_message = "Gagal memuat data konstituensi. Kesalahan: " . $e->getMessage();
 }
-
 ?>
 
 <!-- Tampilkan pesan error jika ada -->

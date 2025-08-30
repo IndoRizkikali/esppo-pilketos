@@ -1,6 +1,10 @@
 # crypto_config.example.yml
-# File ini berisi contoh konfigurasi untuk enkripsi data sensitif
+# File ini berisi contoh konfigurasi kunci enkripsi untuk pengamanan data sensitif
 # Edit file ini dengan kunci enkripsi yang sebenarnya sebelum digunakan dan simpan ulang sebagai crypto_config.yml
+# Jaga kerahasiaan kunci enkripsi di file crypto_config.yml, dengan menjaga akses ke file ini!
+# JANGAN SAMPAI MENGUNGGAH FILE crypto_config.yml DENGAN KUNCI ENKRIPSI YANG SEBENARNYA KE REPOSITORI PUBLIK!
+# RESIKO KEAMANAN: JIKA KUNCI ENKRIPSI TERSEBUT TERSEBAR, DATA SENSITIF PEMILIH DAPAT DIBACA OLEH PIHAK YANG TIDAK BERTANGGUNG JAWAB!
+# RESIKO KEBOCORAN DATA JIKA KUNCI BOCOR TANGGUNG SENDIRI!
 crypto_config:
  - aes_keys:
    # Kunci simetris AES untuk enkripsi data sensitif

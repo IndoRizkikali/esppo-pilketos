@@ -1,23 +1,34 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Logout
+ * pusminlihdu/logout.php
  *
- * Halaman konfirmasi dan eksekusi Logout untuk Pengelola dan Pengawas.
+ * File ini menangani proses logout untuk administrator Pusminlihdu.
+ * Ini mencakup konfirmasi logout, penghapusan sesi,
+ * dan pengalihan ke halaman login dengan pesan sukses.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. INISIALISASI
 // -----------------------------------------------------------------------------
+
+// Menggunakan nama sesi yang konsisten dengan aplikasi Pusminlihdu
 session_name('eSPPO_PAPT_V2');
 session_start();
 
+// Tetapkan versi aplikasi
 define('ESPPO_VERSION', '2.0.0');
 
+// -----------------------------------------------------------------------------
 // 2. PROSES LOGOUT (JIKA DIKONFIRMASI)
 // -----------------------------------------------------------------------------
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_logout'])) {
     // Hapus semua variabel sesi
     $_SESSION = array();
@@ -38,10 +49,11 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 // Ambil nama pengguna dari sesi untuk ditampilkan di pesan konfirmasi
 $admin_name = htmlspecialchars($_SESSION['admin_nama'] ?? 'Pengguna');
-
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -64,6 +76,7 @@ $admin_name = htmlspecialchars($_SESSION['admin_nama'] ?? 'Pengguna');
     }
   </style>
 </head>
+
 <body class="hold-transition logout-page">
 <div class="login-box">
   <div class="card card-outline card-danger">
@@ -97,4 +110,5 @@ $admin_name = htmlspecialchars($_SESSION['admin_nama'] ?? 'Pengguna');
 <!-- AdminLTE App -->
 <script src="../uis/adminlte-3.2.0/dist/js/adminlte.min.js"></script>
 </body>
+
 </html>

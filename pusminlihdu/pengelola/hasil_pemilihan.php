@@ -1,16 +1,28 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Hasil Pemilihan
+ * pusminlihdu/pengelola/hasil_pemilihan.php
  *
- * Halaman untuk menampilkan hasil pemilihan secara keseluruhan.
+ * Halaman ini menampilkan hasil pemilihan secara ringkas.
+ * Pengelola dapat melihat statistik pemilihan seperti total DPT,
+ * jumlah suara masuk, tingkat partisipasi, dan perolehan suara per kandidat.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DATA STATISTIK
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $stats = [
     'total_dpt' => 0,
     'total_suara_masuk' => 0,
@@ -22,8 +34,6 @@ $vote_results = [];
 $error_message = '';
 
 try {
-    // $db sudah tersedia dari loader (index.php)
-    
     // Ambil statistik umum dalam satu query jika memungkinkan, atau beberapa query cepat
     $stats['total_dpt'] = $db->query("SELECT COUNT(*) FROM data_pemilih")->fetch_row()[0] ?? 0;
     $stats['total_suara_masuk'] = $db->query("SELECT COUNT(*) FROM data_suara")->fetch_row()[0] ?? 0;
@@ -60,7 +70,6 @@ try {
 } catch (mysqli_sql_exception $e) {
     $error_message = "Gagal memuat data hasil pemilihan. Kesalahan: " . $e->getMessage();
 }
-
 ?>
 
 <!-- Tampilkan pesan error jika ada -->

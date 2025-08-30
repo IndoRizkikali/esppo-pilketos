@@ -1,19 +1,32 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk menampilkan data kehadiran pemilih (yang sudah login ke SSE).
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Kehadiran Pemilih
+ * pusminlihdu/pengelola/kehadiran_pemilih.php
+ * 
+ * Halaman ini menampilkan daftar kehadiran pemilih yang telah login ke SSE dan telah memilih.
+ * Pengelola dapat melihat statistik kehadiran seperti total DPT, jumlah pemilih yang hadir,
+ * dan persentase kehadiran.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DATA
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $attendance_list = [];
 $error_message = '';
 $stats = ['total_dpt' => 0, 'total_hadir' => 0, 'persen_hadir' => 0.0];
+
 try {
     // Ambil statistik
     $stats['total_dpt'] = $db->query("SELECT COUNT(*) FROM data_pemilih")->fetch_row()[0] ?? 0;

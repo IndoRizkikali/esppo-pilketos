@@ -1,16 +1,28 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Tambah Massal Pemilih (NO GUI)
+ * pusminlihdu/pengelola/tambah_massal_pemilih.php
+ * 
+ * Halaman ini menangani proses penambahan pemilih secara massal melalui file spreadsheet.
+ * Pengelola dapat mengunggah file yang berisi data pemilih untuk ditambahkan ke dalam sistem.
+ * PERHATIAN: Halaman ini tidak memiliki antarmuka pengguna grafis (GUI) dan hanya menangani
+ * proses backend untuk mengimpor data pemilih.
  *
- * Skrip backend untuk memproses unggah massal DPT dari file spreadsheet.
- *
- * @version 2.0.2
- * @author Tim Pengembang e-SPPO
+ * @version 2.0.0
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. INISIALISASI & VALIDASI AWAL
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+// Pastikan sesi admin sudah ada
 session_name('eSPPO_PAPT_V2');
 session_start();
 
@@ -46,7 +58,7 @@ if (!move_uploaded_file($file['tmp_name'], $file_path)) {
     redirect_with_message('error', 'Gagal memindahkan file yang diunggah.');
 }
 
-
+// -----------------------------------------------------------------------------
 // 2. PROSES SPREADSHEET
 // -----------------------------------------------------------------------------
 $success_count = 0;

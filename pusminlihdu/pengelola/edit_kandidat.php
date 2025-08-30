@@ -1,16 +1,28 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk mengedit atau menghapus data kandidat.
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Edit Kandidat
+ * pusminlihdu/pengelola/edit_kandidat.php
+ * 
+ * Halaman ini menangani proses pengeditan data kandidat yang sudah ada.
+ * Pengelola dapat memperbarui informasi kandidat seperti nama, jenis kelamin,
+ * konstituensi, visi, misi, dan foto kandidat.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
-// 1. Inisialisasi & Pengambilan Data Awal
 // -----------------------------------------------------------------------------
+// 1. INISIALISASI & PENGAMBILAN DATA AWAL
+// -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $success_message = '';
 $error_message = '';
 $candidate_data = null;

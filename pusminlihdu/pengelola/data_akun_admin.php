@@ -1,18 +1,27 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Data Akun Admin
+ * pusminlihdu/pengelola/data_akun_admin.php
+ * 
+ * Halaman ini mengelola akun administrasi untuk pengelola sistem.
+ * Pengelola dapat menambah, mengedit, dan menghapus akun admin dan akun pengawas.
  *
- * Halaman untuk mengelola Akun Administrasi (Pengelola & Pengawas).
- *
- * @version 2.0.1
- * @author Tim Pengembang e-SPPO
+ * @version 2.0.0
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
-// Helper sudah dimuat oleh loader (index.php). $db dan crypto_helper.php sudah tersedia.
-
+// -----------------------------------------------------------------------------
 // 1. LOGIKA PEMROSESAN FORM (CRUD ACTIONS)
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $success_message = '';
 $error_message = '';
 
@@ -115,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
+// -----------------------------------------------------------------------------
 // 2. PENGAMBILAN DATA UNTUK DITAMPILKAN
 // -----------------------------------------------------------------------------
 $admin_accounts = [];
@@ -126,7 +136,6 @@ try {
 } catch (mysqli_sql_exception $e) {
     $error_message = "Gagal memuat daftar akun. Kesalahan: " . $e->getMessage();
 }
-
 ?>
 
 <!-- Tampilkan pesan sukses atau error -->

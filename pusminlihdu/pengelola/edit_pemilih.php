@@ -1,26 +1,37 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk mengelola (Cari, Ubah, Reset, Hapus) data pemilih individual.
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Edit Pemilih
+ * pusminlihdu/pengelola/edit_pemilih.php
+ * 
+ * Halaman ini menangani pengelolaan data pemilih yang sudah terdaftar.
+ * Pengelola dapat mengubah data pokok, akun, mereset akun, atau menghapus pemilih.
+ * Halaman ini juga menyediakan fitur pencarian untuk menemukan pemilih berdasarkan ID unik.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
-// Helper dan koneksi DB sudah dimuat oleh loader.
+// -----------------------------------------------------------------------------
+// 1. INISIALISASI VARIABEL
+// -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
 $db = get_db_connection();
 
-// 1. Inisialisasi Variabel
-// -----------------------------------------------------------------------------
 $success_message = '';
 $error_message = '';
 $voter_data = null;
 $search_id = $_GET['id_unik_pemilih'] ?? null;
 
-// 2. Logika Pemrosesan Form (Actions)
 // -----------------------------------------------------------------------------
+// 2. LOGIKA PEMEROSESAN FORM
+// -----------------------------------------------------------------------------
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action_id = $_POST['id_unik_pemilih'] ?? '';
     // Set search_id agar data pemilih tetap ditampilkan setelah aksi
@@ -130,10 +141,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
-// 3. Pengambilan Data untuk Tampilan
 // -----------------------------------------------------------------------------
+// 3. PENGAMBILAN DATA UNTUK TAMPILAN
+// -----------------------------------------------------------------------------
+
 $all_voters = [];
 $active_constituencies = [];
+
 try {
     // Ambil semua pemilih untuk dropdown pencarian
     $result_all = $db->query("SELECT id_unik_pemilih, nama_pemilih, nama_akun_pemilih FROM data_pemilih ORDER BY nama_pemilih ASC");

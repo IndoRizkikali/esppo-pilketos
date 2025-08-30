@@ -1,20 +1,32 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
- *
- * Halaman untuk menampilkan Daftar Pemilih Tetap (DPT).
- *
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Daftar Pemilih
+ * pusminlihdu/pengelola/daftar_pemilih.php
+ * 
+ * Halaman ini menampilkan daftar pemilih tetap (DPT) yang telah terdaftar.
+ * Pengelola dapat melihat informasi dasar pemilih seperti nomor DPT,
+ * nama, jenis kelamin, konstituensi, nama akun, dan status pemilih.
+ * 
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DATA
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $voters = [];
 $error_message = '';
+
 try {
-    // $db sudah tersedia dari loader (index.php)
     // Query untuk mengambil data pemilih dan menggabungkannya dengan nama konstituensi
     $query = "
         SELECT 
@@ -38,7 +50,6 @@ try {
 } catch (mysqli_sql_exception $e) {
     $error_message = "Gagal memuat data pemilih. Kesalahan: " . $e->getMessage();
 }
-
 ?>
 
 <!-- Tampilkan pesan error jika ada -->

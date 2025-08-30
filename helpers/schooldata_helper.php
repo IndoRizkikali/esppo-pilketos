@@ -1,9 +1,20 @@
 <?php
-// helpers/schooldata_helper.php
-
 /**
- * File ini berisi fungsi-fungsi helper untuk mengakses data konfigurasi sekolah.
+ * e-SPPO - Helper untuk Data Sekolah
+ * helpers/schooldata_helper.php
+ * 
+ * File ini berisi fungsi-fungsi helper untuk mengakses data konfigurasi sekolah,
+ * seperti nama sekolah, alamat, dan informasi lainnya yang disimpan dalam file YAML.
+ *
+ * @version 2.0.0
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
+ * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
+
+// Sertakan pustaka untuk parsing YAML jika tidak menggunakan ekstensi PECL.
+// require_once __DIR__ . '/../vendor/spyc/spyc.php';
 
 /**
  * Fungsi untuk memuat dan menyediakan data konfigurasi sekolah.

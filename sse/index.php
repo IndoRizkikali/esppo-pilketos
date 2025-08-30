@@ -1,14 +1,22 @@
 <?php
 /**
- * e-SPPO - Surat Suara Elektronik (SSE)
+ * e-SPPO - Surat Suara Elektronik (SSE) - Halaman Utama / Surat Suara
+ * sse/index.php
  *
- * Halaman utama (Surat Suara) untuk pemilih memberikan suara.
+ * Halaman ini menampilkan surat suara elektronik untuk pemilih.
+ * Pemilih dapat memilih kandidat dengan mengeklik kartu kandidat.
+ * Setelah memilih, pemilih dapat mengirimkan suaranya melalui tombol yang tersedia.
+ * Skrip ini juga menangani otentikasi pemilih dan pengambilan data pemilihan serta kandidat.
+ * Jika tidak ada pemilihan yang aktif, akan ditampilkan pesan yang sesuai.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. INISIALISASI & OTENTIKASI
 // -----------------------------------------------------------------------------
 
@@ -28,7 +36,13 @@ if (!isset($_SESSION['voter_id_unik'])) {
     header('Location: login.php');
     exit();
 }
+// **Otentikasi**: Cek apakah pemilih sudah memilih sebelumnya. Jika sudah, redirect ke halaman sukses.
+// if (isset($_SESSION['voter_status']) && $_SESSION['voter_status'] === 'SUDAH_MEMILIH') {
+//    header('Location: vote_successful.php');
+//    exit();
+// }
 
+// -----------------------------------------------------------------------------
 // 2. PENGAMBILAN DATA
 // -----------------------------------------------------------------------------
 
@@ -67,10 +81,11 @@ try {
 
 // Ambil data pemilih dari sesi untuk ditampilkan
 $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
-
 ?>
+
 <!doctype html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -94,7 +109,6 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
         }
         
         body {
-            /* Menggunakan gambar latar belakang yang ditentukan */
             background-image: linear-gradient(rgba(240, 242, 245, 0.8), rgba(240, 242, 245, 0.8)), url('../assets/imgs/esppo/sse-index.png');
             background-size: cover;
             background-position: center center;
@@ -239,8 +253,8 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
         }
     </style>
 </head>
-<body>
 
+<body>
     <header class="ballot-header">
         <div class="container">
             <div class="text-center mb-3">
@@ -278,7 +292,7 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
                                     <img src="../assets/imgs/sse-foto-kandidat/<?= htmlspecialchars($candidate['foto_kandidat'] ?? 'default.png') ?>" 
                                          alt="Foto Kandidat <?= htmlspecialchars($candidate['no_urut_kandidat']) ?>" 
                                          class="candidate-photo my-3"
-                                         onerror="this.onerror=null; this.src='https://placehold.co/120x120/e0e0e0/757575?text=Foto';">
+                                         onerror="this.onerror=null; this.src='https://placehold.co/240x240/e0e0e0/757575?text=Foto%20kandidat';">
                                     
                                     <p class="candidate-name mb-1"><?= htmlspecialchars($candidate['nama_calon_1']) ?></p>
                                     <?php if ($election_data['tipe_peserta_pemilihan'] === 'BERPASANGAN' && !empty($candidate['nama_calon_2'])): ?>
@@ -311,6 +325,8 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
             <div class="alert alert-warning text-center" role="alert">
                 <h4 class="alert-heading">Surat Suara Tidak Tersedia!</h4>
                 <p>Saat ini tidak ada data pemilihan atau kandidat yang dapat ditampilkan. Mohon hubungi panitia pemilihan.</p>
+                <hr>
+                <p class="mb-0">Pastikan pemilihan sudah dimulai dan kandidat telah ditentukan.</p>
             </div>
         <?php endif; ?>
     </main>
@@ -325,10 +341,11 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
           </div>
           <div class="modal-body">
             Apakah Anda yakin dengan pilihan Anda? Suara yang sudah dikirim tidak dapat diubah kembali.
+            Jika ada kesalahan dan ingin mereset pilihan, silakan hubungi panitia pemilihan.
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="button" id="confirmVoteBtn" class="btn btn-primary">Ya, Kirim Suara</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak - Kembali ke Surat Suara</button>
+            <button type="button" id="confirmVoteBtn" class="btn btn-primary">Ya - Kirim Suara</button>
           </div>
         </div>
       </div>
@@ -366,4 +383,5 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
         });
     </script>
 </body>
+
 </html>

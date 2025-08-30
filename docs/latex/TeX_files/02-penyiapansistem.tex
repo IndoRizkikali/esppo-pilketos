@@ -1,0 +1,182 @@
+% ===================================================================================
+% BAB 2: PENYIAPAN INFRASTRUKTUR DAN INSTALASI e-SPPO
+% Berisi panduan teknis untuk menyiapkan server dan menginstal aplikasi e-SPPO.
+% File ini akan di-include oleh main.tex
+% ===================================================================================
+
+\part{Penyiapan Infrastruktur dan Instalasi e-SPPO}
+\label{part:penyiapan_sistem}
+
+Bab ini menyajikan panduan teknis yang komprehensif untuk menyiapkan lingkungan server dan melakukan instalasi aplikasi e-SPPO. Proses ini ditujukan untuk administrator sistem atau panitia teknis yang bertanggung jawab atas infrastruktur pemilihan. Keberhasilan instalasi sangat bergantung pada pemenuhan setiap persyaratan dan langkah-langkah konfigurasi yang diuraikan di bawah ini secara cermat.
+
+% -----------------------------------------------------------------------------------
+% Section: Persyaratan Sistem dan Aplikasi
+% -----------------------------------------------------------------------------------
+\section{Persyaratan Sistem dan Aplikasi}
+\label{sec:persyaratan_sistem}
+Sebelum memulai, pastikan server yang akan digunakan telah memenuhi persyaratan perangkat keras dan lunak berikut.
+
+\subsection{Persyaratan Fisik dan Sistem Operasi}
+Meskipun e-SPPO dapat berjalan di komputer biasa (PC desktop atau laptop), penggunaan perangkat keras kelas server sangat disarankan untuk stabilitas dan performa optimal, terutama saat melayani banyak pemilih secara bersamaan. Jika beban kerja dapat dikelola dengan baik (misalnya, jumlah pemilih tidak terlalu besar), komputer biasa dapat difungsikan sebagai server.
+
+\begin{itemize}
+	\item \textbf{Perangkat Keras (Hardware):}
+	\begin{itemize}
+		\item \textbf{Prosesor (CPU):} Diperlukan prosesor yang cukup tangguh untuk memproses data. Direkomendasikan minimal setara dengan \textbf{Intel Core i5 atau i7} generasi modern atau yang lebih tinggi.
+		\item \textbf{RAM:}
+		\begin{itemize}
+			\item Minimum: \textbf{4 GB}
+			\item Disarankan: \textbf{8 GB -- 16 GB} untuk kelancaran operasional.
+			\item Optimal: \textbf{Di atas 16 GB} untuk skala pemilihan yang besar.
+		\end{itemize}
+		\item \textbf{Penyimpanan:} Ruang penyimpanan harus cukup untuk menampung:
+		\begin{itemize}
+			\item Sistem Operasi (Windows/Linux).
+			\item \textit{Stack} server (Apache, PHP, MariaDB/MySQL).
+			\item Aplikasi pendukung (seperti phpMyAdmin).
+			\item Aplikasi e-SPPO beserta seluruh dependensi dan berkas yang akan dihasilkannya (laporan, gambar, dll.).
+		\end{itemize}
+		\item \textbf{Jaringan:} Koneksi jaringan yang stabil dan andal. Penggunaan koneksi kabel (Ethernet) lebih diutamakan daripada nirkabel.
+	\end{itemize}
+	\item \textbf{Sistem Operasi (OS) yang Didukung:}
+	\begin{itemize}
+		\item Microsoft Windows (mulai dari Windows 7 hingga Windows 11).
+		\item Microsoft Windows Server (mulai dari versi 2012 hingga 2025).
+		\item Distribusi Linux (seperti Ubuntu, CentOS, Debian).
+		\item macOS.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Persyaratan Perangkat Lunak Server}
+\begin{itemize}
+	\item \textbf{Server Web:} Dioptimalkan untuk \textbf{Apache HTTP Server versi 2.4}.
+	\item \textbf{PHP:} Versi minimum yang diperlukan adalah \textbf{PHP 8.2.x}, namun aplikasi ini dirancang dan diuji secara ekstensif pada \textbf{PHP 8.3.x}.
+	\item \textbf{Ekstensi PHP Wajib:} Sejumlah ekstensi PHP harus diaktifkan agar semua fitur e-SPPO dapat berjalan. Bagi pengguna yang menginstal PHP secara manual (bukan melalui paket seperti XAMPP), perhatian ekstra pada bagian ini sangat penting. Berikut adalah daftar ekstensi krusial dan fungsinya:
+	\begin{description}
+		\item[\texttt{mysqli} dan \texttt{pdo\_mysql}] Penting untuk koneksi antara aplikasi PHP dan server basis data MySQL/MariaDB.
+		\item[\texttt{curl}] Dibutuhkan untuk komunikasi dengan layanan eksternal atau API di masa depan.
+		\item[\texttt{fileinfo}] Digunakan untuk mendeteksi tipe file (MIME type) dari berkas yang diunggah, seperti logo sekolah atau foto kandidat, untuk validasi keamanan.
+		\item[\texttt{gd}] Diperlukan untuk pemrosesan gambar, seperti membuat \textit{thumbnail} atau memanipulasi gambar yang diunggah.
+		\item[\texttt{intl}] (Internationalization) Penting untuk penanganan format tanggal, waktu, dan angka yang sesuai dengan standar regional (lokal).
+		\item[\texttt{mbstring}] (Multi-byte String) Krusial untuk penanganan karakter non-Latin (Unicode) dengan benar, memastikan nama atau data lain dapat ditampilkan tanpa masalah.
+		\item[\texttt{exif}] Digunakan untuk membaca metadata dari file gambar, yang mungkin diperlukan untuk validasi tambahan.
+		\item[\texttt{openssl}] Diperlukan untuk fungsi-fungsi kriptografi, termasuk enkripsi AES-256-CBC yang digunakan e-SPPO.
+		\item[\texttt{yaml}] \textbf{Sangat Penting.} Digunakan untuk membaca semua file konfigurasi e-SPPO (\texttt{*.yml}). Ekstensi ini \textbf{tidak tersedia secara default} dan harus diinstal manual dari PECL:
+		\begin{itemize}
+			\item Unduh dari: \url{https://pecl.php.net/package/yaml}
+			\item Khusus Windows: \url{https://pecl.php.net/package/yaml/2.2.5/windows}
+		\end{itemize}
+	\end{description}
+	\item \textbf{Manajer Dependensi:} \textbf{Composer} harus sudah terinstal secara global di sistem Anda untuk mengelola pustaka-pustaka PHP.
+	\item \textbf{Sistem Manajemen Basis Data (DBMS):} Diperlukan server basis data yang mendukung \textbf{protokol MySQL}. Oleh karena itu, Anda dapat menggunakan server \textbf{MySQL} maupun \textbf{MariaDB}.
+\end{itemize}
+
+% -----------------------------------------------------------------------------------
+% Section: Penyiapan Sistem dan Aplikasi
+% -----------------------------------------------------------------------------------
+\section{Penyiapan Sistem dan Aplikasi}
+\label{sec:penyiapan_aplikasi}
+Tahap ini mencakup instalasi dan konfigurasi \textit{stack} server (Apache, PHP, MariaDB/MySQL). Anda dapat menginstalnya satu per satu atau menggunakan paket terintegrasi seperti XAMPP untuk kemudahan.
+
+\subsection{Konfigurasi Wajib Server}
+\importantbox{Langkah ini sangat penting. Melewatkan atau salah mengonfigurasi bagian ini dapat menyebabkan aplikasi tidak berjalan atau mengalami galat (\textit{error}) saat digunakan, terutama pada fitur-fitur yang membutuhkan sumber daya lebih.}
+
+Agar e-SPPO berjalan optimal, beberapa pengaturan pada file konfigurasi Apache (\texttt{httpd.conf}) dan PHP (\texttt{php.ini}) \textbf{wajib} disesuaikan.
+
+\subsubsection{Konfigurasi PHP (\texttt{php.ini})}
+Beberapa parameter PHP perlu ditingkatkan dari nilai defaultnya untuk mengakomodasi kebutuhan e-SPPO:
+\begin{itemize}
+	\item \texttt{max\_execution\_time = 210} \\ Waktu eksekusi skrip ditingkatkan untuk mencegah \textit{timeout} saat memproses data dalam jumlah besar, seperti impor DPT atau pembuatan laporan.
+	\item \texttt{memory\_limit = 512M} \\ Alokasi memori ditingkatkan agar PHP dapat menangani operasi yang intensif, seperti membaca file Excel yang besar.
+	\item \texttt{upload\_max\_filesize = 512M} \\ Batas ukuran file yang diunggah harus cukup besar untuk menampung file DPT atau gambar kandidat.
+	\item \texttt{post\_max\_size = 0} \\ (Nilai 0 berarti tidak terbatas) Ukuran data POST ditingkatkan untuk mendukung pengiriman formulir dengan banyak data.
+	\item \texttt{date.timezone = Asia/Makassar} \\ Atur zona waktu sesuai lokasi Anda. Ini krusial agar stempel waktu (\textit{timestamp}) pada data suara dan log tercatat dengan benar.
+	\item \textbf{Aktifkan Ekstensi:} Hapus tanda titik koma (;) di awal baris ekstensi yang dibutuhkan seperti \texttt{extension=curl}, \texttt{extension=intl}, \texttt{extension=mysqli}, \texttt{extension=openssl}, dan terutama \texttt{extension=yaml}.
+\end{itemize}
+
+\subsubsection{Konfigurasi Apache (\texttt{httpd.conf})}
+Pastikan Apache dimuat dengan modul yang benar dan dikonfigurasi untuk menangani PHP.
+\begin{itemize}
+	\item \textbf{Aktifkan Modul:} Pastikan modul seperti \texttt{mod\_rewrite} dan \texttt{mod\_ssl} diaktifkan dengan menghapus tanda pagar (\#) di awal barisnya.
+	\item \textbf{Izinkan \texttt{.htaccess}:} Ubah direktif \texttt{AllowOverride} dari \texttt{None} menjadi \texttt{All} untuk direktori root web Anda. Ini penting agar file \texttt{.htaccess} e-SPPO dapat berfungsi.
+\end{itemize}
+\notebox{Contoh lengkap perubahan yang direkomendasikan pada kedua file tersebut dapat dilihat pada berkas \texttt{httpd.diff.txt} dan \texttt{php.diff.txt} yang disertakan dalam lampiran panduan ini.}
+
+% -----------------------------------------------------------------------------------
+% Section: Instalasi e-SPPO
+% -----------------------------------------------------------------------------------
+\section{Instalasi e-SPPO}
+\label{sec:instalasi_esppo}
+\subsection{Memperoleh dan Memasang Kode Sumber}
+\begin{enumerate}
+	\item Unduh rilis terbaru e-SPPO dari repositori resmi: \url{https://github.com/IndoRizkikali/esppo-pilketos}.
+	\item Ekstrak file arsip \texttt{.zip} yang telah diunduh.
+	\item Salin seluruh isi folder hasil ekstraksi ke dalam direktori root server web Anda (misalnya \texttt{C:/xampp/htdocs/esppo}).
+\end{enumerate}
+
+\subsection{Instalasi Dependensi Menggunakan Composer}
+\begin{enumerate}
+	\item Buka terminal atau \textit{command prompt}.
+	\item Arahkan direktori aktif ke folder instalasi e-SPPO \\(misal: \texttt{cd C:/xampp/htdocs/esppo}).
+	\item Jalankan perintah: \texttt{composer install}. Tunggu hingga proses selesai.
+\end{enumerate}
+
+% -----------------------------------------------------------------------------------
+% Section: Pengaturan Awal e-SPPO
+% -----------------------------------------------------------------------------------
+\section{Pengaturan Awal e-SPPO}
+\label{sec:pengaturan_awal}
+\warningbox{Semua file konfigurasi di dalam direktori \texttt{confs/} harus dibuat dari file contoh (\texttt{*.example.yml}) dan diisi dengan lengkap. Setiap variabel di dalamnya digunakan oleh aplikasi, dan jika ada yang kosong atau salah format, dapat menyebabkan aplikasi gagal berfungsi.}
+
+\subsection{Pembuatan dan Konfigurasi Basis Data}
+\begin{enumerate}
+	\item \textbf{Buat Basis Data:} Menggunakan phpMyAdmin, buat basis data baru (misal: \texttt{sppoe\_2025}).
+	\item \textbf{Buat Pengguna (Direkomendasikan):} Buat akun pengguna basis data baru yang hanya memiliki hak akses penuh ke basis data tersebut.
+	\item \textbf{Impor Struktur Tabel:} Impor file \texttt{sppoe\_db\_tables.sql} ke dalam basis data yang baru dibuat.
+	\item \textbf{Konfigurasi Koneksi:} Salin \texttt{confs/db\_config.example.yml} menjadi \texttt{db\_config.yml}, lalu edit isinya dengan informasi koneksi basis data Anda.
+\end{enumerate}
+
+\subsection{Pengaturan Infrastruktur Kriptografi}
+\begin{enumerate}
+	\item \textbf{Buat Kunci Enkripsi:} Buka perkakas web \texttt{tools/esppo-keymaker.php} melalui peramban. Salin kunci yang dihasilkan.
+	\item \textbf{Konfigurasi Kunci:} Salin \texttt{confs/crypto\_config.example.yml} menjadi \texttt{crypto\_config.yml}, lalu tempelkan kunci yang telah Anda buat.
+\end{enumerate}
+
+\subsection{Pengaturan Data Sekolah}
+\begin{enumerate}
+	\item Salin file \texttt{confs/school\_config.example.yml} menjadi \texttt{school\_config.yml}.
+	\item Buka file \texttt{school\_config.yml} dan \textbf{isi semua informasi yang diminta secara lengkap dan akurat}.
+\end{enumerate}
+\begin{verbatim}
+	# Contoh lengkap file school_config.yml yang harus diisi
+	school_config:
+	- nama_sekolah: "SMA Negeri 1 Bati-Bati"
+	- npsn_sekolah: 30300701
+	- alamat_sekolah:
+	- alamat: "Jl. A. Yani, KM. 33.3"
+	- kecamatan: "Bati-Bati"
+	- dati_2: "Kabupaten Tanah Laut"
+	- dati_1: "Kalimantan Selatan"
+	- kode_pos: 70852
+	- no_telepon: 05114779299
+	- email_sekolah: "sman1bati.bati@gmail.com"
+	- website_sekolah: "https://www.sman1batibati.sch.id"
+	- kepala_sekolah:
+	- nama: "Taslim, S.Pd., M.Pd."
+	- nip_kepsek: 197106021998021005
+	- tahun_ajaran:
+	- tahun_ajaran: "2025/2026"
+	- semester: "Ganjil"
+	- logo:
+	- logo_sekolah: "Logo_SMABAT_Besar.png"
+	- logo_osis: "Logo_OSIS_SMABAT.png"
+	- url_akses_esppo:
+	- url_sse:
+	- "https://192.168.0.11/esppo/"
+	- url_pspo:
+	- "https://192.168.0.11/esppo/"
+\end{verbatim}
+
+\notebox{Setelah semua langkah di atas selesai dan semua file konfigurasi telah diisi dengan benar, aplikasi e-SPPO Anda siap untuk diakses. Langkah selanjutnya adalah melakukan login awal ke Pusminlihdu untuk memulai pengelolaan data pemilihan.}
+
+% --- Akhir dari Bab 2: Penyiapan Infrastruktur dan Instalasi e-SPPO ---

@@ -1,21 +1,28 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Tambah Pemilih
+ * pusminlihdu/pengelola/tambah_pemilih.php
+ * 
+ * Halaman untuk menambah pemilih secara manual atau massal.
+ * Pengelola dapat menambahkan pemilih satu per satu atau mengunggah
+ * data pemilih dalam jumlah besar melalui file spreadsheet.
  *
- * Halaman antarmuka untuk menambah pemilih secara manual dan massal.
- *
- * @version 2.0.1
- * @author Tim Pengembang e-SPPO
+ * @version 2.0.0
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
-// Pastikan koneksi DB selalu tersedia di awal.
-// Meskipun loader sudah menyertakan helper, pemanggilan ulang ini memastikan
-// $db ada bahkan setelah redirect dari skrip lain.
-$db = get_db_connection();
-
+// -----------------------------------------------------------------------------
 // 1. LOGIKA PEMROSESAN (HANYA UNTUK TAMBAH MANUAL)
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+$db = get_db_connection();
+
 $success_message = '';
 $error_message = '';
 
@@ -59,8 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
+// -----------------------------------------------------------------------------
 // 2. PENGAMBILAN DATA UNTUK FORM
 // -----------------------------------------------------------------------------
+
 $next_dpt_number = 1;
 $active_constituencies = [];
 try {
@@ -87,7 +96,6 @@ if (isset($_GET['status'])) {
         $error_message = htmlspecialchars($_GET['message']);
     }
 }
-
 ?>
 
 <!-- Tampilkan pesan sukses atau error -->

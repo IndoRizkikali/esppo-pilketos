@@ -1,9 +1,20 @@
 <?php
-// helpers/crypto_helper.php
-
 /**
- * File ini berisi semua fungsi yang terkait dengan keamanan dan kriptografi.
+ * e-SPPO - Fungsi Helper Kriptografi
+ * helpers/crypto_helper.php
+ * 
+ * File ini berisi fungsi-fungsi yang terkait dengan keamanan dan kriptografi,
+ * seperti enkripsi ID pemilih, hashing kata sandi, dan generasi ID unik.
+ *
+ * @version 2.0.0
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
+ * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
+
+// Sertakan pustaka untuk parsing YAML jika tidak menggunakan ekstensi PECL.
+// require_once __DIR__ . '/../vendor/spyc/spyc.php';
 
 /**
  * Memuat konfigurasi kriptografi dari file YAML.

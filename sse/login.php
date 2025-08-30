@@ -1,14 +1,20 @@
 <?php
 /**
- * e-SPPO - Surat Suara Elektronik (SSE)
- *
- * Halaman Login untuk Pemilih.
+ * e-SPPO - Surat Suara Elektronik (SSE) - Login Pemilih
+ * sse/login.php
+ * 
+ * Skrip ini menangani proses login pemilih untuk sistem Surat Suara Elektronik (SSE).
+ * Ini mencakup pengambilan data pemilihan yang sedang berlangsung,
+ * validasi kredensial pemilih, dan pengelolaan sesi.
  *
  * @version 2.0.0
- * @author Tim Pengembang e-SPPO
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. INISIALISASI & KONFIGURASI
 // -----------------------------------------------------------------------------
 
@@ -35,6 +41,7 @@ if (isset($_SESSION['voter_id_unik'])) {
     exit();
 }
 
+// -----------------------------------------------------------------------------
 // 2. PENGAMBILAN DATA AWAL
 // -----------------------------------------------------------------------------
 
@@ -55,7 +62,7 @@ try {
     die("Sistem sedang mengalami gangguan teknis. Tidak dapat memuat data pemilihan.");
 }
 
-
+// -----------------------------------------------------------------------------
 // 3. PROSES LOGIN (SAAT FORM DI-SUBMIT)
 // -----------------------------------------------------------------------------
 
@@ -120,10 +127,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 ?>
+
 <!doctype html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -146,7 +154,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
         body {
-            /* Menggunakan gambar latar belakang yang ditentukan */
             background-image: url('../assets/imgs/esppo/sse-login.png');
             background-size: cover;
             background-position: center center;
@@ -218,8 +225,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
-<body>
 
+<body>
     <div class="card login-card">
         <div class="card-body">
             <div class="text-center mb-4">
@@ -276,4 +283,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Bootstrap 5 JS -->
     <script src="../uis/bootstrap-5.3.7/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

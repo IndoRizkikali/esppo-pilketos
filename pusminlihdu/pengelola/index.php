@@ -1,39 +1,59 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Loader/Routing
+ * pusminlihdu/pengelola/index.php
  *
- * Loader Utama untuk Peran PENGELOLA.
- * File ini membangun kerangka halaman (header, sidebar, footer) dan memuat
- * konten halaman spesifik berdasarkan permintaan URL.
+ * File ini menangani pemuatan halaman untuk pengelola, termasuk inisialisasi sesi,
+ * keamanan, dan pemetaan halaman. Pengelola dapat mengakses berbagai fungsi
+ * seperti mengelola data sekolah, pejabat sekolah, pemilihan, akun admin,
+ * dan lainnya.
  *
- * @version 2.0.1
- * @author Tim Pengembang e-SPPO
+ * @version 2.0.0
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. INISIALISASI & PENJAGA KEAMANAN (SECURITY GUARD)
 // -----------------------------------------------------------------------------
+
+// Menggunakan nama sesi yang konsisten dengan aplikasi Pusminlihdu
 session_name('eSPPO_PAPT_V2');
 session_start();
 
+// Cek apakah pengguna sudah login sebagai pengelola
+// Jika tidak, arahkan ke halaman logout untuk keamanan.
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true || $_SESSION['admin_role'] !== 'PENGELOLA') {
     header('Location: ../logout.php');
     exit();
 }
 
+// Muat autoload untuk memudahkan penggunaan pustaka eksternal
+// dan fungsi helper.
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../helpers/db_helper.php';
+
+// Inisialisasi koneksi basis data
 $db = get_db_connection();
+
 require_once __DIR__ . '/../../helpers/schooldata_helper.php';
 require_once __DIR__ . '/../../helpers/crypto_helper.php';
 
+// -----------------------------------------------------------------------------
 // 2. LOGIKA PEMUATAN HALAMAN (PAGE LOADING LOGIC)
 // -----------------------------------------------------------------------------
+
+// Tetapkan versi aplikasi untuk digunakan di footer
 if (!defined('ESPPO_VERSION')) {
-    define('ESPPO_VERSION', '2.0.1');
+    define('ESPPO_VERSION', '2.0.0');
 }
 
-// PERBAIKAN: Pemetaan nama halaman ke judul yang lebih deskriptif
+// Daftar judul halaman yang akan digunakan untuk pemuatan konten dinamis
+// Kunci adalah nama halaman (tanpa ekstensi .php), nilai adalah judul yang
+// akan ditampilkan di header dan breadcrumb.
+// Halaman ini akan dimuat berdasarkan parameter 'page' di URL.
 $page_titles = [
     'dashboard' => 'Dashboard Utama',
     'data_sekolah' => 'Informasi Data Sekolah',
@@ -56,12 +76,14 @@ $page_titles = [
     'cetak_kartu_dpt' => 'Cetak Kartu Pemilih',
     'cetak_panduan_akses' => 'Cetak Panduan Akses SSE',
     'cetak_daftar_kandidat' => 'Cetak Daftar Kandidat',
-    'cetak_laporan_pemilhan' => 'Cetak Laporan Akhir Pemilihan',
+    'cetak_laporan_pemilihan' => 'Cetak Laporan Akhir Pemilihan',
     'cetak_kehadiran' => 'Cetak Laporan Kehadiran',
     'cetak_sse_ljk' => 'Cetak LJK SSE (OMR)',
-    'tambah_masal_pemilih' => 'Proses Impor DPT' // Ditambahkan untuk kelengkapan
+    'tambah_masal_pemilih' => 'Proses Impor DPT'
 ];
 
+// Ambil parameter 'page' dari URL, jika tidak ada, default ke 'dashboard'.
+// Halaman ini akan dimuat berdasarkan nilai ini.
 $page = $_GET['page'] ?? 'dashboard';
 
 // Jika halaman yang diminta tidak ada di daftar, set ke '404'.
@@ -73,10 +95,11 @@ if (!array_key_exists($page, $page_titles)) {
     $content_to_load = $page . '.php';
 }
 
+// Ambil nama admin dan peran dari sesi, jika tidak ada, gunakan nilai default.
 $admin_name = htmlspecialchars($_SESSION['admin_nama'] ?? 'Admin');
 $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
-
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -95,6 +118,7 @@ $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
   <link rel="stylesheet" href="../../uis/adminlte-3.2.0/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <link rel="stylesheet" href="../../uis/adminlte-3.2.0/dist/css/adminlte.min.css">
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
   <!-- Navbar -->
@@ -102,7 +126,7 @@ $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
     <ul class="navbar-nav">
       <li class="nav-item"><a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a></li>
       <li class="nav-item d-none d-sm-inline-block"><a href="index.php?page=dashboard" class="nav-link">Dashboard</a></li>
-      <li class="nav-item d-none d-sm-inline-block"><a href="../../sse/" target="_blank" class="nav-link">Lihat Aplikasi SSE</a></li>
+      <li class="nav-item d-none d-sm-inline-block"><a href="../../sse/" target="_blank" class="nav-link">Aplikasi SSE</a></li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">
@@ -162,8 +186,7 @@ $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
 
   <!-- Footer -->
   <footer class="main-footer">
-    <strong>Hak Cipta &copy; 2024-<?= date("Y"); ?> <a href="#">Tim Pengembang e-SPPO</a>.</strong>
-    Seluruh hak cipta dilindungi.
+    <strong>&copy; 2024-<?= date("Y"); ?> <a href="#">OSIS SMA Negeri 1 Bati-Bati</a></strong>
     <div class="float-right d-none d-sm-inline-block"><b>Versi</b> <?= ESPPO_VERSION ?></div>
   </footer>
 
@@ -184,4 +207,5 @@ $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
 <script src="../../uis/adminlte-3.2.0/plugins/chart.js/Chart.min.js"></script>
 <script src="../../uis/adminlte-3.2.0/dist/js/adminlte.js"></script>
 </body>
+
 </html>

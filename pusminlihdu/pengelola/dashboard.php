@@ -1,16 +1,27 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu)
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Dashboard
+ * pusminlihdu/pengelola/dashboard.php
  *
- * Halaman Dashboard Utama (Versi yang disempurnakan).
+ * File ini menangani pemuatan halaman dashboard untuk pengelola,
+ * menampilkan statistik pemilihan, grafik perolehan suara,
+ * dan informasi penting lainnya.
  *
- * @version 2.0.1
- * @author Tim Pengembang e-SPPO
+ * @version 2.0.0
+ * @author Rizki Yandri & OSIS SMA Negeri 1 Bati-Bati
  * @copyright (c) 2025
+ * @license Apache License 2.0
+ * @see NOTICE untuk informasi lisensi dan hak cipta lengkap.
  */
 
+// -----------------------------------------------------------------------------
 // 1. PENGAMBILAN DATA STATISTIK
 // -----------------------------------------------------------------------------
+
+// Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
+// oleh index.php.
+
+// Inisialisasi variabel untuk menyimpan statistik dan data lainnya
 $stats = [
     'total_dpt' => 0, 'total_kandidat' => 0, 'total_suara_masuk' => 0,
     'total_kehadiran' => 0, 'partisipasi_suara' => 0.0, 'partisipasi_hadir' => 0.0,
@@ -48,7 +59,6 @@ try {
 } catch (mysqli_sql_exception $e) {
     $error_message = "Gagal memuat data dashboard. Kesalahan: " . $e->getMessage();
 }
-
 ?>
 
 <?php if (!empty($error_message)): ?>
@@ -65,7 +75,8 @@ try {
 </div>
 
 <div class="row">
-    <div class="col-md-8">
+
+    <div class="col-md-8" id="grafik-suara">
         <!-- Grafik Hasil Perolehan Suara Sementara -->
         <div class="card card-primary card-outline">
             <div class="card-header"><h3 class="card-title"><i class="far fa-chart-bar"></i> Grafik Perolehan Suara Sementara</h3></div>
@@ -76,8 +87,12 @@ try {
                     <div class="text-center text-muted py-5"><p>Belum ada suara yang masuk untuk ditampilkan.</p></div>
                 <?php endif; ?>
             </div>
+            <div class="card-footer text-muted text-center">
+                Grafik diperbarui setiap 7,5 menit.
+            </div>
         </div>
     </div>
+    
     <div class="col-md-4">
         <!-- Informasi Kegiatan Pemilihan -->
         <div class="card card-info card-outline">
@@ -122,7 +137,7 @@ try {
             </div>
         </div>
          <!-- Aktivitas Login Terakhir -->
-        <div class="card card-secondary card-outline">
+        <div class="card card-secondary card-outline" id="aktivitas-login">
             <div class="card-header"><h3 class="card-title"><i class="fas fa-history"></i> Aktivitas Login Terakhir</h3></div>
             <div class="card-body p-0">
                 <ul class="products-list product-list-in-card">
@@ -148,6 +163,7 @@ try {
 <!-- Skrip untuk Chart.js -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Inisialisasi grafik perolehan suara
     const voteData = <?= json_encode($vote_distribution) ?>;
     if (voteData.length > 0) {
         const labels = voteData.map(item => `No. ${item.no_urut_kandidat}`);
@@ -158,5 +174,10 @@ document.addEventListener('DOMContentLoaded', function () {
             options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
         });
     }
+    
+    // Muat ulang halaman setiap 7,5 menit (450.000 ms)
+    setTimeout(function(){
+        window.location.reload(1);
+    }, 450000);
 });
 </script>
