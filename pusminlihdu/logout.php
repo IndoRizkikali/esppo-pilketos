@@ -66,6 +66,8 @@ $admin_name = htmlspecialchars($_SESSION['admin_nama'] ?? 'Pengguna');
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../uis/adminlte-3.2.0/plugins/fontawesome-free/css/all.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="../uis/adminlte-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../uis/adminlte-3.2.0/dist/css/adminlte.min.css">
   <style>
@@ -77,11 +79,11 @@ $admin_name = htmlspecialchars($_SESSION['admin_nama'] ?? 'Pengguna');
   </style>
 </head>
 
-<body class="hold-transition logout-page">
+<body class="hold-transition login-page logout-page">
 <div class="login-box">
   <div class="card card-outline card-danger">
     <div class="card-header text-center">
-      <a href="#" class="h1"><b>Konfirmasi</b></a>
+      <a href="#" class="h1"><b>Pusminlihdu</b></a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Halo, <strong><?= $admin_name ?></strong>. Apakah Anda yakin ingin keluar dari sesi ini?</p>

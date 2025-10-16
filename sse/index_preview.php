@@ -1,8 +1,14 @@
 <?php
 /**
- * e-SPPO - Surat Suara Elektronik (SSE) - Halaman Utama / Surat Suara
- * sse/index.php
+ * e-SPPO - Surat Suara Elektronik (SSE) - Halaman Utama / Surat Suara - Pratayang untuk Pusminlihdu
+ * sse/index_preview.php
+ * 
+ * Halaman pratayang dari tampilan SSE untuk keperluan preview.
+ * Halaman ini menampilkan tampilan surat suara elektronik yang akan dilihat oleh pemilih.
+ * Pratayang ini membantu memastikan bahwa semua elemen tampilan SSE sudah sesuai dengan yang diinginkan.
+ * Halaman ini diakses di pusminlihdu/pengelola/pratayang_sse.php melalui iframe.
  *
+ * Dari sse/index_preview.php:
  * Halaman ini menampilkan surat suara elektronik untuk pemilih.
  * Pemilih dapat memilih kandidat dengan mengeklik kartu kandidat.
  * Setelah memilih, pemilih dapat mengirimkan suaranya melalui tombol yang tersedia.
@@ -81,7 +87,7 @@ try {
 }
 
 // Ambil data pemilih dari sesi untuk ditampilkan
-$voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
+$voter_name = "Contoh Pemilih"; // Ganti data pemilih contoh untuk pratayang
 ?>
 
 <!doctype html>
@@ -352,6 +358,11 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
       </div>
     </div>
 
+    <!-- Tambahkan pesan pratayang -->
+    <div class="alert alert-warning position-fixed bottom-0 start-50 translate-middle-x mb-2" style="z-index: 1050;">
+        <i class="fas fa-eye me-2"></i> Mode Pratayang - Tampilan ini hanya untuk preview
+    </div>
+
     <!-- Bootstrap 5 JS -->
     <script src="../uis/bootstrap-5.3.7/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -377,9 +388,10 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
                 });
             });
 
-            // Kirim form saat tombol konfirmasi di modal diklik
-            confirmVoteBtn.addEventListener('click', function() {
-                form.submit();
+            // Nonaktifkan pengiriman form untuk pratayang
+            confirmVoteBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Ini hanya mode pratayang. Pengiriman suara dinonaktifkan.');
             });
         });
     </script>

@@ -1,0 +1,88 @@
+
+Nama Akun Admin Default dan Kata Sandi:
+
+- SYSADMIN eSPPO200admin (Pengelola)
+- SYSVIEWER eSPPO200viewer (Pengawas)
+
+Versi 1.1.0:
+- pusminlihdu (root)
+  - 404.php
+  - absen_pemilih.php
+  - cetak_daftar_calon.php
+  - cetak_dpt.php
+  - cetak_sse_ljk.php
+  - daftar_paslon.php
+  - daftar_pemilih.php
+  - dashboard.php
+  - data_admin.php
+  - data_konstituensi.php
+  - data_pemilihan.php
+  - data_sekolah.php
+  - edit_konstituensi.php
+  - edit_paslon.php
+  - edit_pemilih.php
+  - footer.php
+  - hasil_pemilihan.php
+  - header.php
+  - index.php - halaman loader
+  - laporan_absensi.php
+  - laporan_pemilihan.php
+  - login.php
+  - logout.php
+  - preview-sse-index.php
+  - rincian_suara.php
+  - sidebar.php
+  - tambah_massal_pemilih.php - khusus skrip pengunggahan spreadsheet dan pengolahan data, UI di tambah_pemilih.php
+  - tambah_paslon.php
+  - tambah_pemilih.php
+
+Versi 2.0.0:
+- pusminlihdu (root)
+  - index.php - halaman stub perutean
+  - login.php - halaman login utama
+  - logout.php - halaman logout utama
+  - pengelola (folder)
+    - 404.php
+    - cetak_daftar_kandidat.php
+    - cetak_dpt.php
+    - cetak_kartu_dpt.php
+    - cetak_kehadiran.php
+    - cetak_laporan_pemilhan.php
+    - cetak_panduan_akses.php
+    - cetak_sse_ljk.php
+    - daftar_kandidat.php
+    - daftar_konstituensi.php
+    - daftar_pemilih.php
+    - dashboard.php
+    - data_akun_admin.php
+    - data_pejabat_sekolah.php
+    - data_pemilihan.php
+    - data_sekolah.php
+    - edit_kandidat.php
+    - edit_konstituensi.php
+    - edit_pemilih.php
+    - hasil_pemilihan.php
+    - kehadiran_pemilih.php
+    - pratayang_sse.php
+    - sidebar_pengelola.php
+    - tambah_kandidat.php
+    - tambah_masal_pemilih.php - khusus skrip pengunggahan spreadsheet dan pengolahan data, UI di tambah_pemilih.php
+    - tambah_pemilih.php
+    - index.php - halaman loader
+  - pengawas (folder)
+    - 404.php
+    - cetak_daftar_kandidat.php
+    - cetak_dpt.php
+    - cetak_kehadiran.php
+    - cetak_laporan_pemilhan.php
+    - daftar_kandidat.php
+    - daftar_konstituensi.php
+    - daftar_pemilih.php
+    - dashboard.php
+    - data_pejabat_sekolah.php
+    - data_sekolah.php
+    - hasil_pemilihan.php
+    - kehadiran_pemilih.php
+    - pratayang_sse.php
+    - sidebar_pengawas.php
+    - index.php - halaman loader

@@ -144,7 +144,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?= htmlspecialchars($error_message) ?>
         </div>
       <?php endif; ?>
-
+      <?php if (isset($_GET['status']) && $_GET['status'] === 'logout_success'): ?>
+        <div class="alert alert-success text-center" role="alert">
+            Anda telah berhasil keluar.
+        </div>
+      <?php endif; ?>
+      
       <form action="login.php" method="post">
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="Nama Akun" name="nama_akun_admin" required autofocus>

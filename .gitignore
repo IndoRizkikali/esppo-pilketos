@@ -1,5 +1,6 @@
 .vs/*
 .vscode/*
+.kiro/*
 
 vendor/*
 
@@ -17,6 +18,13 @@ confs/crypto_config.yml
 confs/db_config.yml
 confs/school_config.yml
 
+logs/*
+backups/*
+
 docs/markdown/*
+docs/latex/*
+!docs/latex/main.pdf
+!docs/latex/main.tex
+!docs/latex/TeX_files/*.tex
 
 portal-1.1.0/*
