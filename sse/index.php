@@ -262,9 +262,9 @@ $voter_name = htmlspecialchars($_SESSION['voter_nama'] ?? 'Pemilih');
                 <h5 class="fw-bold">APLIKASI SURAT SUARA ELEKTRONIK</h5>
             </div>
             <div class="school-info">
-                <img src="../assets/imgs/sekolah/<?= htmlspecialchars($school_config['logo'][0]['logo_sekolah'] ?? 'placeholder.png') ?>" alt="Logo Sekolah" class="logo">
+                <img src="../assets/imgs/sekolah/<?= htmlspecialchars($school_config['logo'][0]['logo_sekolah'] ?? 'placeholder_sekolah.png') ?>" alt="Logo Sekolah" class="logo">
                 <span class="school-name text-center mx-3"><?= htmlspecialchars($school_config['nama_sekolah'] ?? 'Nama Sekolah') ?></span>
-                <img src="../assets/imgs/sekolah/<?= htmlspecialchars($school_config['logo'][1]['logo_osis'] ?? 'placeholder.png') ?>" alt="Logo OSIS" class="logo">
+                <img src="../assets/imgs/sekolah/<?= htmlspecialchars($school_config['logo'][1]['logo_osis'] ?? 'placeholder_osis.png') ?>" alt="Logo OSIS" class="logo">
             </div>
             <div class="voter-info">
                 Pemilih: <strong><?= $voter_name ?></strong>

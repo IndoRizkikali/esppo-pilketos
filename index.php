@@ -1,8 +1,9 @@
 <?php
 /**
  * e-SPPO - Portal Web Publik
- *
  * Halaman Utama / Landing Page.
+ * index.php
+ * 
  * - Menampilkan informasi pemilihan terkini.
  * - Menyediakan tautan ke halaman kandidat, DPT, hasil pemilihan
  * - Menyediakan tautan untuk login pemilih dan panitia.

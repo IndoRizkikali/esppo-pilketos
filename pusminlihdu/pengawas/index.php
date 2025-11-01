@@ -56,9 +56,8 @@ if (!defined('ESPPO_VERSION')) {
 $page_titles = [
     'dashboard' => 'Dashboard Utama',
     'data_sekolah' => 'Informasi Data Sekolah',
-    'data_pejabat_sekolah' => 'Kelola Data Pejabat Sekolah',
-    'data_pemilihan' => 'Konfigurasi Kegiatan Pemilihan',
-    'data_akun_admin' => 'Kelola Akun Administrasi',
+    'data_pejabat_sekolah' => 'Lihat Data Pejabat Sekolah',
+    'data_pemilihan' => 'Informasi Kegiatan Pemilihan',
     'daftar_konstituensi' => 'Lihat Daftar Konstituensi',
     'daftar_pemilih' => 'Lihat Daftar Pemilih Tetap (DPT)',
     'daftar_kandidat' => 'Lihat Daftar Kandidat',
@@ -109,7 +108,7 @@ $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
   <link rel="stylesheet" href="../../uis/adminlte-3.2.0/dist/css/adminlte.min.css">
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -196,6 +195,14 @@ $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
 <script src="../../uis/adminlte-3.2.0/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <script src="../../uis/adminlte-3.2.0/plugins/chart.js/Chart.min.js"></script>
 <script src="../../uis/adminlte-3.2.0/dist/js/adminlte.js"></script>
+<script>
+  $(document).ready(function() {
+    // Buka sidebar secara default di layar lebar (>= 992px)
+    if ($(window).width() >= 992) {
+      $('body').removeClass('sidebar-collapse');
+    }
+  });
+</script>
 </body>
 
 </html>

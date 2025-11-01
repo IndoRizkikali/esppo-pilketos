@@ -2,24 +2,24 @@
 .vscode/*
 .kiro/*
 
-vendor/*
+!assets/imgs/esppo/*
 
 assets/imgs/sekolah/*
-assets/imgs/sse-foto-kandidat/*
 !assets/imgs/sekolah/placeholder_sekolah.png
 !assets/imgs/sekolah/placeholder_osis.png
+assets/imgs/sse-foto-kandidat/*
 
-assets/pdfs/laporan/*
-assets/pdfs/sse-ljk/*
+assets/pdfs/laporan/*.pdf
+assets/pdfs/sse-ljk/*.pdf
 
-assets/spreadsheets/papt-unggah-massal/*
+assets/spreadsheets/papt-unggah-massal/*.*
+!assets/spreadsheets/templat/Templat_Format_Data_Akun_DPT_Pusminlihdu_eSPPO.xltx
+
+backups/*
 
 confs/crypto_config.yml
 confs/db_config.yml
 confs/school_config.yml
-
-logs/*
-backups/*
 
 docs/markdown/*
 docs/latex/*
@@ -27,4 +27,8 @@ docs/latex/*
 !docs/latex/main.tex
 !docs/latex/TeX_files/*.tex
 
+logs/*
+
 portal-1.1.0/*
+
+vendor/*

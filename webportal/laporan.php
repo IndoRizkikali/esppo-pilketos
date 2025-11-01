@@ -1,8 +1,9 @@
 <?php
 /**
  * e-SPPO - Portal Web Publik
- *
  * Halaman Laporan Pemilihan
+ * webportal/laporan.php
+ * 
  * - Menyediakan akses ke laporan resmi pemilihan, termasuk daftar kandidat, DPT, dan hasil pemilihan.
  * - Menampilkan informasi terbaru tentang laporan yang tersedia untuk diunduh.
  * - Memungkinkan pengguna untuk mengunduh laporan dalam format PDF.
@@ -22,7 +23,7 @@ $school_config = get_school_config();
 $report_types = [
     'laporan_daftar_kandidat' => [
         'title' => 'Laporan Daftar Kandidat',
-        'description' => 'Berisi profil lengkap semua pasangan calon yang berpartisipasi.',
+        'description' => 'Dokumen resmi yang berisi daftar semua calon/pasangan calon yang berpartisipasi.',
         'icon' => 'fas fa-users',
         'color' => 'primary',
         'latest_file' => null,
@@ -30,7 +31,7 @@ $report_types = [
     ],
     'laporan_dpt' => [
         'title' => 'Laporan Daftar Pemilih Tetap',
-        'description' => 'Dokumen resmi yang memuat seluruh daftar pemilih yang berhak memberikan suara.',
+        'description' => 'Dokumen resmi yang memuat seluruh konstituensi dan daftar pemilih yang berhak memberikan suara.',
         'icon' => 'fas fa-list-ol',
         'color' => 'info',
         'latest_file' => null,
@@ -38,7 +39,7 @@ $report_types = [
     ],
     'laporan_pemilihan' => [
         'title' => 'Laporan Hasil Pemilihan',
-        'description' => 'Berita acara dan rincian lengkap perolehan suara serta statistik akhir pemilihan.',
+        'description' => 'Berita acara resmi dan rincian lengkap perolehan suara serta statistik akhir pemilihan.',
         'icon' => 'fas fa-poll',
         'color' => 'success',
         'latest_file' => null,

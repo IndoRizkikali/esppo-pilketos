@@ -56,7 +56,7 @@ $laporanPages = ['cetak_dpt', 'cetak_daftar_kandidat', 'cetak_laporan_pemilhan',
   <div class="sidebar">
     <!-- Sidebar Menu -->
     <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-legacy" data-widget="treeview" role="menu" data-accordion="false">
         
         <li class="nav-item">
           <a href="index.php?page=dashboard" class="nav-link <?= isMenuItemActive('dashboard', $currentPage) ?>">

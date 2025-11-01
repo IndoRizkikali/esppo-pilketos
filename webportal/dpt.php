@@ -1,8 +1,9 @@
 <?php
 /**
  * e-SPPO - Portal Web Publik
- *
  * Halaman Daftar Pemilih Tetap (DPT)
+ * webportal/dpt.php
+ * 
  * - Menampilkan daftar pemilih yang terdaftar untuk pemilihan.
  * - Menyediakan statistik pemilih, termasuk total, yang sudah memilih, dan persentase partisipasi.
  * - Menyediakan informasi lengkap tentang setiap pemilih, termasuk nama, jenis kelamin, konstituensi, dan status pemilih.

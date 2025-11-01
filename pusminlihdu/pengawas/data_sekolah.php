@@ -1,7 +1,7 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Data Sekolah
- * pusminlihdu/pengelola/data_sekolah.php
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengawas, Informasi Data Sekolah
+ * pusminlihdu/pengawas/data_sekolah.php
  *
  * File ini menampilkan informasi lengkap tentang sekolah, termasuk alamat,
  * kepala sekolah, tahun ajaran, dan logo. Data ini diambil dari file konfigurasi

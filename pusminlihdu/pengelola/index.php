@@ -119,7 +119,7 @@ $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
   <link rel="stylesheet" href="../../uis/adminlte-3.2.0/dist/css/adminlte.min.css">
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
 <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -206,6 +206,14 @@ $admin_role = htmlspecialchars($_SESSION['admin_role'] ?? 'Peran');
 <script src="../../uis/adminlte-3.2.0/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <script src="../../uis/adminlte-3.2.0/plugins/chart.js/Chart.min.js"></script>
 <script src="../../uis/adminlte-3.2.0/dist/js/adminlte.js"></script>
+<script>
+  $(document).ready(function() {
+    // Buka sidebar secara default di layar lebar (>= 992px)
+    if ($(window).width() >= 992) {
+      $('body').removeClass('sidebar-collapse');
+    }
+  });
+</script>
 </body>
 
 </html>

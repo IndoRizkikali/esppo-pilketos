@@ -21,7 +21,7 @@
  * Fungsi untuk mendapatkan koneksi ke basis data MariaDB.
  * Fungsi ini membaca konfigurasi dari confs/db_config.yml dan menggunakan
  * pola Singleton untuk memastikan hanya ada satu objek koneksi yang dibuat per request.
- * * @return mysqli|null Objek koneksi mysqli jika berhasil, atau program akan berhenti jika gagal.
+ * @return mysqli|null Objek koneksi mysqli jika berhasil, atau program akan berhenti jika gagal.
  */
 function get_db_connection() {
     // Variabel statis untuk menyimpan objek koneksi agar tidak dibuat berulang kali.

@@ -1,8 +1,9 @@
 <?php
 /**
  * e-SPPO - Portal Web Publik
- *
  * Halaman Hasil Pemilihan
+ * webportal/hasil.php
+ * 
  * - Menampilkan hasil akhir pemilihan, termasuk statistik partisipasi dan perolehan suara.
  * - Menyediakan rincian perolehan suara per kandidat.
  * - Menampilkan grafik perolehan suara dan tingkat partisipasi pemilih.

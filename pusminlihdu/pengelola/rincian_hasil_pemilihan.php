@@ -112,55 +112,114 @@ try {
 
 <!-- Tampilkan hasil hanya jika konstituensi sudah dipilih -->
 <?php if ($selected_constituency_code): ?>
-<hr>
-<h3 class="mb-3">Hasil untuk Konstituensi: <strong><?= htmlspecialchars($selected_constituency_name) ?></strong></h3>
+<div id="auto-refresh-container">
+    <hr>
+    <h3 class="mb-3">Hasil untuk Konstituensi: <strong><?= htmlspecialchars($selected_constituency_name) ?></strong></h3>
 
-<!-- Statistik Ringkas Terfilter -->
-<div class="row">
-    <div class="col-md-4"><div class="small-box bg-info"><div class="inner"><h3><?= number_format($stats['total_dpt']) ?></h3><p>Total DPT di Konstituensi Ini</p></div><div class="icon"><i class="fas fa-users"></i></div></div></div>
-    <div class="col-md-4"><div class="small-box bg-success"><div class="inner"><h3><?= number_format($stats['total_suara_masuk']) ?></h3><p>Suara Masuk dari Konstituensi Ini</p></div><div class="icon"><i class="fas fa-vote-yea"></i></div></div></div>
-    <div class="col-md-4"><div class="small-box bg-primary"><div class="inner"><h3><?= number_format($stats['partisipasi_persen'], 2) ?><sup style="font-size: 20px">%</sup></h3><p>Tingkat Partisipasi</p></div><div class="icon"><i class="fas fa-chart-pie"></i></div></div></div>
-</div>
+    <!-- Statistik Ringkas Terfilter -->
+    <div class="row">
+        <div class="col-md-4"><div class="small-box bg-info"><div class="inner"><h3 id="stats-total-dpt"><?= number_format($stats['total_dpt']) ?></h3><p>Total DPT di Konstituensi Ini</p></div><div class="icon"><i class="fas fa-users"></i></div></div></div>
+        <div class="col-md-4"><div class="small-box bg-success"><div class="inner"><h3 id="stats-suara-masuk"><?= number_format($stats['total_suara_masuk']) ?></h3><p>Suara Masuk dari Konstituensi Ini</p></div><div class="icon"><i class="fas fa-vote-yea"></i></div></div></div>
+        <div class="col-md-4"><div class="small-box bg-primary"><div class="inner"><h3 id="stats-partisipasi-persen"><?= number_format($stats['partisipasi_persen'], 2) ?><sup style="font-size: 20px">%</sup></h3><p>Tingkat Partisipasi</p></div><div class="icon"><i class="fas fa-chart-pie"></i></div></div></div>
+    </div>
 
-<!-- Grafik dan Rincian Terfilter -->
-<div class="card card-primary card-outline">
-    <div class="card-header"><h3 class="card-title">Grafik & Rincian Perolehan Suara</h3></div>
-    <div class="card-body">
-        <?php if ($stats['total_suara_masuk'] > 0): ?>
-            <div class="chart"><canvas id="filteredVoteChart" style="min-height: 250px; height: 250px; max-height: 250px; width: 100%;"></canvas></div>
-        <?php else: ?>
-            <div class="text-center text-muted p-4">Tidak ada suara yang masuk dari konstituensi ini.</div>
-        <?php endif; ?>
+    <!-- Grafik dan Rincian Terfilter -->
+    <div class="card card-primary card-outline">
+        <div class="card-header"><h3 class="card-title">Grafik & Rincian Perolehan Suara</h3></div>
+        <div class="card-body">
+            <div id="chart-container">
+                <?php if ($stats['total_suara_masuk'] > 0): ?>
+                    <div class="chart"><canvas id="filteredVoteChart" style="min-height: 250px; height: 250px; max-height: 250px; width: 100%;"></canvas></div>
+                <?php else: ?>
+                    <div class="text-center text-muted p-4">Tidak ada suara yang masuk dari konstituensi ini.</div>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 </div>
-
-<!-- Skrip untuk Chart.js -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const voteData = <?= json_encode($vote_results) ?>;
-    if (voteData.length > 0 && <?= $stats['total_suara_masuk'] ?> > 0) {
-        const labels = voteData.map(item => `No. ${item.no_urut_kandidat}`);
-        const data = voteData.map(item => item.jumlah_suara);
-        new Chart(document.getElementById('filteredVoteChart').getContext('2d'), {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor : ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8', '#6c757d'],
-                }],
-            },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    }
-});
-</script>
 <?php endif; ?>
 
-<!-- Skrip untuk inisialisasi Select2 -->
+<!-- Skrip untuk inisialisasi Select2 dan auto-refresh -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     // Inisialisasi Select2
     $('.select2').select2({ theme: 'bootstrap4' });
-    });
+
+    <?php if ($selected_constituency_code): ?>
+    const refreshInterval = 15000; // 15 detik untuk pengelola
+    const constituencyCode = '<?= $selected_constituency_code ?>';
+    let filteredVoteChart;
+    const initialVoteData = <?= json_encode($vote_results) ?>;
+    const initialTotalSuara = <?= $stats['total_suara_masuk'] ?>;
+
+    function initOrUpdateChart(voteData, totalSuara) {
+        const chartContainer = document.getElementById('chart-container');
+        if (!chartContainer) return;
+
+        if (totalSuara > 0 && voteData.length > 0) {
+            let canvas = document.getElementById('filteredVoteChart');
+            if (!canvas) {
+                chartContainer.innerHTML = '<div class="chart"><canvas id="filteredVoteChart" style="min-height: 250px; height: 250px; max-height: 250px; width: 100%;"></canvas></div>';
+                canvas = document.getElementById('filteredVoteChart');
+            }
+            const ctx = canvas.getContext('2d');
+            const labels = voteData.map(item => `No. ${item.no_urut_kandidat}`);
+            const data = voteData.map(item => item.jumlah_suara);
+
+            if (filteredVoteChart) {
+                filteredVoteChart.data.labels = labels;
+                filteredVoteChart.data.datasets[0].data = data;
+                filteredVoteChart.update();
+            } else {
+                filteredVoteChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor : ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8', '#6c757d'],
+                        }],
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        } else {
+            chartContainer.innerHTML = '<div class="text-center text-muted p-4">Tidak ada suara yang masuk dari konstituensi ini.</div>';
+            if(filteredVoteChart) {
+                filteredVoteChart.destroy();
+                filteredVoteChart = null;
+            }
+        }
+    }
+
+    function updateUI(data) {
+        // Update stats
+        document.getElementById('stats-total-dpt').textContent = new Intl.NumberFormat('id-ID').format(data.stats.total_dpt);
+        document.getElementById('stats-suara-masuk').textContent = new Intl.NumberFormat('id-ID').format(data.stats.total_suara_masuk);
+        document.getElementById('stats-partisipasi-persen').innerHTML = `${data.stats.partisipasi_persen.toFixed(2)}<sup style="font-size: 20px">%</sup>`;
+
+        // Update chart
+        initOrUpdateChart(data.vote_results, data.stats.total_suara_masuk);
+    }
+
+    function fetchData() {
+        fetch(`../api/rincian_hasil_pemilihan_data.php?konstituensi=${constituencyCode}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Gagal mengambil data:', data.error);
+                    return;
+                }
+                updateUI(data);
+            })
+            .catch(error => console.error('Gagal memuat ulang konten:', error));
+    }
+
+    // Initial chart load
+    initOrUpdateChart(initialVoteData, initialTotalSuara);
+
+    // Set interval for refreshing
+    setInterval(fetchData, refreshInterval);
+    <?php endif; ?>
+});
 </script>

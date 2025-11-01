@@ -77,97 +77,172 @@ try {
 <div class="alert alert-danger"><i class="icon fas fa-ban"></i> <?= htmlspecialchars($error_message) ?></div>
 <?php endif; ?>
 
-<!-- Statistik Ringkas -->
-<div class="row">
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-info"><div class="inner"><h3><?= number_format($stats['total_dpt']) ?></h3><p>Total DPT</p></div><div class="icon"><i class="fas fa-users"></i></div></div>
+<div id="auto-refresh-container">
+    <!-- Statistik Ringkas -->
+    <div class="row">
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-info"><div class="inner"><h3 id="stats-total-dpt"><?= number_format($stats['total_dpt']) ?></h3><p>Total DPT</p></div><div class="icon"><i class="fas fa-users"></i></div></div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-success"><div class="inner"><h3 id="stats-suara-masuk"><?= number_format($stats['total_suara_masuk']) ?></h3><p>Suara Masuk (Partisipasi)</p></div><div class="icon"><i class="fas fa-vote-yea"></i></div></div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning"><div class="inner"><h3 id="stats-belum-memilih"><?= number_format($stats['belum_memilih']) ?></h3><p>Belum Memilih (Golput)</p></div><div class="icon"><i class="fas fa-user-clock"></i></div></div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-primary"><div class="inner"><h3 id="stats-partisipasi-persen"><?= number_format($stats['partisipasi_persen'], 2) ?><sup style="font-size: 20px">%</sup></h3><p>Tingkat Partisipasi</p></div><div class="icon"><i class="fas fa-chart-pie"></i></div></div>
+        </div>
     </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-success"><div class="inner"><h3><?= number_format($stats['total_suara_masuk']) ?></h3><p>Suara Masuk (Partisipasi)</p></div><div class="icon"><i class="fas fa-vote-yea"></i></div></div>
-    </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-warning"><div class="inner"><h3><?= number_format($stats['belum_memilih']) ?></h3><p>Belum Memilih (Golput)</p></div><div class="icon"><i class="fas fa-user-clock"></i></div></div>
-    </div>
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-primary"><div class="inner"><h3><?= number_format($stats['partisipasi_persen'], 2) ?><sup style="font-size: 20px">%</sup></h3><p>Tingkat Partisipasi</p></div><div class="icon"><i class="fas fa-chart-pie"></i></div></div>
-    </div>
-</div>
 
-<div class="row">
-    <!-- Grafik Perolehan Suara -->
-    <div class="col-md-7">
-        <div class="card card-primary card-outline">
-            <div class="card-header"><h3 class="card-title"><i class="far fa-chart-bar"></i> Grafik Perolehan Suara</h3></div>
-            <div class="card-body">
-                <div class="chart"><canvas id="voteChart" style="min-height: 350px; height: 350px; max-height: 350px; width: 100%;"></canvas></div>
+    <div class="row">
+        <!-- Grafik Perolehan Suara -->
+        <div class="col-md-7">
+            <div class="card card-primary card-outline">
+                <div class="card-header"><h3 class="card-title"><i class="far fa-chart-bar"></i> Grafik Perolehan Suara</h3></div>
+                <div class="card-body">
+                    <div class="chart"><canvas id="voteChart" style="min-height: 350px; height: 350px; max-height: 350px; width: 100%;"></canvas></div>
+                </div>
+            </div>
+        </div>
+        <!-- Rincian Perolehan Suara -->
+        <div class="col-md-5">
+            <div class="card card-info card-outline">
+                <div class="card-header"><h3 class="card-title"><i class="fas fa-poll"></i> Rincian Suara per Kandidat</h3></div>
+                <div class="card-body p-0">
+                    <ul class="products-list product-list-in-card pl-2 pr-2" id="vote-results-list">
+                        <?php if (empty($vote_results)): ?>
+                            <li class="item"><div class="text-center text-muted p-4">Belum ada data.</div></li>
+                        <?php else: ?>
+                            <?php foreach ($vote_results as $result): 
+                                $percentage = $stats['total_suara_masuk'] > 0 ? ($result['jumlah_suara'] / $stats['total_suara_masuk']) * 100 : 0;
+                            ?>
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="../../assets/imgs/sse-foto-kandidat/<?= htmlspecialchars($result['foto_kandidat'] ?? 'default.png') ?>" alt="Foto" class="img-size-50">
+                                </div>
+                                <div class="product-info">
+                                    <span class="product-title">No. Urut <?= htmlspecialchars($result['no_urut_kandidat']) ?>: <?= htmlspecialchars($result['nama_calon_1']) ?></span>
+                                    <span class="badge badge-primary float-right"><?= number_format($result['jumlah_suara']) ?> Suara</span>
+                                    <span class="product-description">
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-primary" style="width: <?= $percentage ?>%"></div>
+                                        </div>
+                                        <small><?= number_format($percentage, 2) ?>% dari total suara masuk</small>
+                                    </span>
+                                </div>
+                            </li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <!-- Rincian Perolehan Suara -->
-    <div class="col-md-5">
-        <div class="card card-info card-outline">
-            <div class="card-header"><h3 class="card-title"><i class="fas fa-poll"></i> Rincian Suara per Kandidat</h3></div>
-            <div class="card-body p-0">
-                <ul class="products-list product-list-in-card pl-2 pr-2">
-                    <?php if (empty($vote_results)): ?>
-                        <li class="item"><div class="text-center text-muted p-4">Belum ada data.</div></li>
-                    <?php else: ?>
-                        <?php foreach ($vote_results as $result): 
-                            $percentage = $stats['total_suara_masuk'] > 0 ? ($result['jumlah_suara'] / $stats['total_suara_masuk']) * 100 : 0;
-                        ?>
-                        <li class="item">
-                            <div class="product-img">
-                                <img src="../../assets/imgs/sse-foto-kandidat/<?= htmlspecialchars($result['foto_kandidat'] ?? 'default.png') ?>" alt="Foto" class="img-size-50">
-                            </div>
-                            <div class="product-info">
-                                <span class="product-title">No. Urut <?= htmlspecialchars($result['no_urut_kandidat']) ?>: <?= htmlspecialchars($result['nama_calon_1']) ?></span>
-                                <span class="badge badge-primary float-right"><?= number_format($result['jumlah_suara']) ?> Suara</span>
-                                <span class="product-description">
-                                    <div class="progress progress-sm">
-                                        <div class="progress-bar bg-primary" style="width: <?= $percentage ?>%"></div>
-                                    </div>
-                                    <small><?= number_format($percentage, 2) ?>% dari total suara masuk</small>
-                                </span>
-                            </div>
-                        </li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
 
-<!-- Skrip untuk Chart.js -->
+<!-- Skrip untuk Chart.js dan pembaruan dinamis -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const voteData = <?= json_encode($vote_results) ?>;
-    if (voteData.length > 0) {
+    const refreshInterval = 15000; // 15 detik untuk pengelola
+    let voteChart;
+    const initialVoteData = <?= json_encode($vote_results) ?>;
+
+    function initOrUpdateChart(voteData) {
+        const chartCanvas = document.getElementById('voteChart');
+        if (!chartCanvas) return;
+        const ctx = chartCanvas.getContext('2d');
+
         const labels = voteData.map(item => `No. ${item.no_urut_kandidat}\n${item.nama_calon_1}`);
         const data = voteData.map(item => item.jumlah_suara);
 
-        const barChartCanvas = document.getElementById('voteChart').getContext('2d');
-        new Chart(barChartCanvas, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Jumlah Suara',
-                    backgroundColor: 'rgba(0, 123, 255, 0.8)',
-                    borderColor: 'rgba(0, 123, 255, 1)',
-                    borderWidth: 1,
-                    data: data
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    yAxes: [{ ticks: { beginAtZero: true, callback: function(value) { if (Number.isInteger(value)) { return value; } } } }]
+        if (voteChart) {
+            voteChart.data.labels = labels;
+            voteChart.data.datasets[0].data = data;
+            voteChart.update();
+        } else {
+            voteChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Jumlah Suara',
+                        backgroundColor: 'rgba(0, 123, 255, 0.8)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1,
+                        data: data
+                    }]
                 },
-                legend: { display: false }
-            }
-        });
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{ ticks: { beginAtZero: true, callback: function(value) { if (Number.isInteger(value)) { return value; } } } }]
+                    },
+                    legend: { display: false }
+                }
+            });
+        }
     }
+
+    function updateUI(data) {
+        // Update stats
+        document.getElementById('stats-total-dpt').textContent = new Intl.NumberFormat('id-ID').format(data.stats.total_dpt);
+        document.getElementById('stats-suara-masuk').textContent = new Intl.NumberFormat('id-ID').format(data.stats.total_suara_masuk);
+        document.getElementById('stats-belum-memilih').textContent = new Intl.NumberFormat('id-ID').format(data.stats.belum_memilih);
+        document.getElementById('stats-partisipasi-persen').innerHTML = `${data.stats.partisipasi_persen.toFixed(2)}<sup style="font-size: 20px">%</sup>`;
+
+        // Update vote results list
+        const listContainer = document.getElementById('vote-results-list');
+        listContainer.innerHTML = '';
+        if (data.vote_results.length > 0) {
+            data.vote_results.forEach(result => {
+                const totalSuaraMasuk = data.stats.total_suara_masuk;
+                const percentage = totalSuaraMasuk > 0 ? (result.jumlah_suara / totalSuaraMasuk) * 100 : 0;
+                const foto = result.foto_kandidat || 'default.png';
+                listContainer.innerHTML += `
+                    <li class="item">
+                        <div class="product-img">
+                            <img src="../../assets/imgs/sse-foto-kandidat/${foto}" alt="Foto" class="img-size-50">
+                        </div>
+                        <div class="product-info">
+                            <span class="product-title">No. Urut ${result.no_urut_kandidat}: ${result.nama_calon_1}</span>
+                            <span class="badge badge-primary float-right">${new Intl.NumberFormat('id-ID').format(result.jumlah_suara)} Suara</span>
+                            <span class="product-description">
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-primary" style="width: ${percentage.toFixed(2)}%"></div>
+                                </div>
+                                <small>${percentage.toFixed(2)}% dari total suara masuk</small>
+                            </span>
+                        </div>
+                    </li>`;
+            });
+        } else {
+            listContainer.innerHTML = '<li class="item"><div class="text-center text-muted p-4">Belum ada data.</div></li>';
+        }
+
+        // Update chart
+        initOrUpdateChart(data.vote_results);
+    }
+
+    function fetchData() {
+        fetch('../api/hasil_pemilihan_data.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Gagal mengambil data:', data.error);
+                    return;
+                }
+                updateUI(data);
+            })
+            .catch(error => console.error('Gagal memuat ulang konten:', error));
+    }
+
+    // Initial load
+    if (initialVoteData.length > 0) {
+        initOrUpdateChart(initialVoteData);
+    }
+    
+    // Set interval for refreshing
+    setInterval(fetchData, refreshInterval);
 });
 </script>

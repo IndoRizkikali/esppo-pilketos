@@ -1,9 +1,9 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengelola, Dashboard
- * pusminlihdu/pengelola/dashboard.php
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengawas, Dashboard
+ * pusminlihdu/pengawas/dashboard.php
  *
- * File ini menangani pemuatan halaman dashboard untuk pengelola,
+ * File ini menangani pemuatan halaman dashboard untuk pengawas,
  * menampilkan statistik pemilihan, grafik perolehan suara,
  * dan informasi penting lainnya.
  *
@@ -15,8 +15,8 @@
  */
 
 // -----------------------------------------------------------------------------
-// 1. PENGAMBILAN DATA STATISTIK
-// -----------------------------------------------------------------------------
+// 1. PENGAMBILAN DATA STATISTIK (HANYA UNTUK PEMUATAN AWAL)
+// ----------------------------------------------------------------------------
 
 // Diasumsikan bahwa seluruh helper dan koneksi basis data sudah dimuat sebelumnya
 // oleh index.php.
@@ -28,7 +28,6 @@ $stats = [
 ];
 $election_data = null;
 $vote_distribution = [];
-$recent_logins = [];
 $error_message = '';
 
 try {
@@ -52,10 +51,6 @@ try {
     $result_votes = $db->query("SELECT k.no_urut_kandidat, k.nama_calon_1, COUNT(s.kode_id_suara) as jumlah_suara FROM data_kandidat k LEFT JOIN data_suara s ON k.no_urut_kandidat = s.no_urut_kandidat GROUP BY k.no_urut_kandidat ORDER BY k.no_urut_kandidat ASC");
     if ($result_votes) $vote_distribution = $result_votes->fetch_all(MYSQLI_ASSOC);
 
-    // Ambil aktivitas login terakhir
-    $result_logins = $db->query("SELECT nama_akun_admin, waktu_masuk_terakhir FROM akun_administrasi WHERE waktu_masuk_terakhir IS NOT NULL ORDER BY waktu_masuk_terakhir DESC LIMIT 5");
-    if ($result_logins) $recent_logins = $result_logins->fetch_all(MYSQLI_ASSOC);
-
 } catch (mysqli_sql_exception $e) {
     $error_message = "Gagal memuat data dashboard. Kesalahan: " . $e->getMessage();
 }
@@ -67,11 +62,11 @@ try {
 
 <!-- Baris Info Box Statistik Utama -->
 <div class="row">
-  <div class="col-12 col-sm-6 col-md-3"><div class="info-box"><span class="info-box-icon bg-primary elevation-1"><i class="fas fa-users"></i></span><div class="info-box-content"><span class="info-box-text">Total DPT</span><span class="info-box-number"><?= number_format($stats['total_dpt']) ?></span></div></div></div>
-  <div class="col-12 col-sm-6 col-md-3"><div class="info-box"><span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-tie"></i></span><div class="info-box-content"><span class="info-box-text">Jumlah Kandidat</span><span class="info-box-number"><?= number_format($stats['total_kandidat']) ?></span></div></div></div>
+  <div class="col-12 col-sm-6 col-md-3"><div class="info-box"><span class="info-box-icon bg-primary elevation-1"><i class="fas fa-users"></i></span><div class="info-box-content"><span class="info-box-text">Total DPT</span><span class="info-box-number" id="stats-total-dpt"><?= number_format($stats['total_dpt']) ?></span></div></div></div>
+  <div class="col-12 col-sm-6 col-md-3"><div class="info-box"><span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-tie"></i></span><div class="info-box-content"><span class="info-box-text">Jumlah Kandidat</span><span class="info-box-number" id="stats-total-kandidat"><?= number_format($stats['total_kandidat']) ?></span></div></div></div>
   <div class="clearfix hidden-md-up"></div>
-  <div class="col-12 col-sm-6 col-md-3"><div class="info-box"><span class="info-box-icon bg-success elevation-1"><i class="fas fa-vote-yea"></i></span><div class="info-box-content"><span class="info-box-text">Suara Masuk</span><span class="info-box-number"><?= number_format($stats['total_suara_masuk']) ?></span></div></div></div>
-  <div class="col-12 col-sm-6 col-md-3"><div class="info-box"><span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-user-check"></i></span><div class="info-box-content"><span class="info-box-text">Total Kehadiran</span><span class="info-box-number"><?= number_format($stats['total_kehadiran']) ?></span></div></div></div>
+  <div class="col-12 col-sm-6 col-md-3"><div class="info-box"><span class="info-box-icon bg-success elevation-1"><i class="fas fa-vote-yea"></i></span><div class="info-box-content"><span class="info-box-text">Suara Masuk</span><span class="info-box-number" id="stats-total-suara-masuk"><?= number_format($stats['total_suara_masuk']) ?></span></div></div></div>
+  <div class="col-12 col-sm-6 col-md-3"><div class="info-box"><span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-user-check"></i></span><div class="info-box-content"><span class="info-box-text">Total Kehadiran</span><span class="info-box-number" id="stats-total-kehadiran"><?= number_format($stats['total_kehadiran']) ?></span></div></div></div>
 </div>
 
 <div class="row">
@@ -84,11 +79,12 @@ try {
                 <?php if (!empty($vote_distribution)): ?>
                     <div class="chart"><canvas id="voteChart" style="min-height: 300px; height: 300px; max-height: 300px; width: 100%;"></canvas></div>
                 <?php else: ?>
-                    <div class="text-center text-muted py-5"><p>Belum ada suara yang masuk untuk ditampilkan.</p></div>
+                    <div class="text-center text-muted py-5" id="vote-chart-placeholder"><p>Belum ada suara yang masuk untuk ditampilkan.</p></div>
+                    <div class="chart" style="display:none;"><canvas id="voteChart" style="min-height: 300px; height: 300px; max-height: 300px; width: 100%;"></canvas></div>
                 <?php endif; ?>
             </div>
             <div class="card-footer text-muted text-center">
-                Grafik diperbarui setiap 7,5 menit.
+                Grafik diperbarui setiap 30 detik.
             </div>
         </div>
     </div>
@@ -97,7 +93,7 @@ try {
         <!-- Informasi Kegiatan Pemilihan -->
         <div class="card card-info card-outline">
             <div class="card-header"><h3 class="card-title"><i class="fas fa-calendar-alt"></i> Informasi Pemilihan</h3></div>
-            <div class="card-body">
+            <div class="card-body" id="election-info-card">
                 <?php if ($election_data): 
                     $fmt = new IntlDateFormatter('id_ID', IntlDateFormatter::FULL, IntlDateFormatter::NONE, null, IntlDateFormatter::GREGORIAN);
                     $tanggal_mulai_str = $fmt->format(new DateTime($election_data['tanggal_mulai']));
@@ -119,65 +115,88 @@ try {
                     <div class="row text-center">
                         <div class="col-6 border-right">
                             <div class="description-block">
-                                <h5 class="description-header text-success"><?= number_format($stats['partisipasi_suara'], 2) ?>%</h5>
+                                <h5 class="description-header text-success" id="stats-partisipasi-suara"><?= number_format($stats['partisipasi_suara'], 2) ?>%</h5>
                                 <span class="description-text">PARTISIPASI SUARA</span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="description-block">
-                                <h5 class="description-header text-info"><?= number_format($stats['partisipasi_hadir'], 2) ?>%</h5>
+                                <h5 class="description-header text-info" id="stats-partisipasi-hadir"><?= number_format($stats['partisipasi_hadir'], 2) ?>%</h5>
                                 <span class="description-text">TINGKAT KEHADIRAN</span>
                             </div>
                         </div>
                     </div>
                 <?php else: ?>
                     <p class="text-muted text-center">Belum ada data kegiatan pemilihan yang dibuat.</p>
-                    <div class="text-center"><a href="index.php?page=data_pemilihan" class="btn btn-primary">Buat Kegiatan Baru</a></div>
                 <?php endif; ?>
-            </div>
-        </div>
-        <!-- Aktivitas Login Terakhir -->
-        <div class="card card-secondary card-outline" id="aktivitas-login">
-            <div class="card-header"><h3 class="card-title"><i class="fas fa-history"></i> Aktivitas Login Terakhir</h3></div>
-            <div class="card-body p-0">
-                <ul class="products-list product-list-in-card">
-                    <?php if(empty($recent_logins)): ?>
-                        <li class="item"><div class="text-muted text-center p-3">Tidak ada aktivitas.</div></li>
-                    <?php else: ?>
-                        <?php foreach($recent_logins as $login): ?>
-                            <li class="item">
-                                <div class="product-info ml-2">
-                                    <span class="product-title"><?= htmlspecialchars($login['nama_akun_admin']) ?></span>
-                                    <span class="badge badge-light float-right"><?= date('d M Y, H:i', strtotime($login['waktu_masuk_terakhir'])) ?></span>
-                                    <span class="product-description">Masuk ke sistem</span>
-                                </div>
-                            </li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </ul>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Skrip untuk Chart.js -->
+<!-- Skrip untuk Chart.js dan pembaruan dinamis -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Inisialisasi grafik perolehan suara
-    const voteData = <?= json_encode($vote_distribution) ?>;
-    if (voteData.length > 0) {
-        const labels = voteData.map(item => `No. ${item.no_urut_kandidat}`);
-        const data = voteData.map(item => item.jumlah_suara);
-        new Chart(document.getElementById('voteChart').getContext('2d'), {
-            type: 'bar',
-            data: { labels: labels, datasets: [{ label: 'Jumlah Suara', backgroundColor: 'rgba(0, 123, 255, 0.8)', data: data }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
-        });
+    let voteChart;
+    const initialVoteData = <?= json_encode($vote_distribution) ?>;
+
+    function initOrUpdateChart(voteData) {
+        const chartCanvas = document.getElementById('voteChart');
+        const chartPlaceholder = document.getElementById('vote-chart-placeholder');
+        
+        if (voteData.length > 0) {
+            if (chartPlaceholder) chartPlaceholder.style.display = 'none';
+            chartCanvas.parentElement.style.display = 'block';
+
+            const labels = voteData.map(item => `No. ${item.no_urut_kandidat}`);
+            const data = voteData.map(item => item.jumlah_suara);
+
+            if (voteChart) {
+                voteChart.data.labels = labels;
+                voteChart.data.datasets[0].data = data;
+                voteChart.update();
+            } else {
+                voteChart = new Chart(chartCanvas.getContext('2d'), {
+                    type: 'bar',
+                    data: { labels: labels, datasets: [{ label: 'Jumlah Suara', backgroundColor: 'rgba(0, 123, 255, 0.8)', data: data }] },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+                });
+            }
+        } else {
+            if (chartPlaceholder) chartPlaceholder.style.display = 'block';
+            chartCanvas.parentElement.style.display = 'none';
+        }
     }
-    
-    // Muat ulang halaman setiap 7,5 menit (450.000 ms)
-    setTimeout(function(){
-        window.location.reload(1);
-    }, 450000);
+
+    function updateDashboard() {
+        fetch('../api/dashboard_data.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error fetching dashboard data:', data.error);
+                    return;
+                }
+
+                // Update info boxes
+                document.getElementById('stats-total-dpt').textContent = new Intl.NumberFormat('id-ID').format(data.stats.total_dpt);
+                document.getElementById('stats-total-kandidat').textContent = new Intl.NumberFormat('id-ID').format(data.stats.total_kandidat);
+                document.getElementById('stats-total-suara-masuk').textContent = new Intl.NumberFormat('id-ID').format(data.stats.total_suara_masuk);
+                document.getElementById('stats-total-kehadiran').textContent = new Intl.NumberFormat('id-ID').format(data.stats.total_kehadiran);
+
+                // Update participation stats
+                document.getElementById('stats-partisipasi-suara').textContent = data.stats.partisipasi_suara.toFixed(2) + '%';
+                document.getElementById('stats-partisipasi-hadir').textContent = data.stats.partisipasi_hadir.toFixed(2) + '%';
+
+                // Update chart
+                initOrUpdateChart(data.vote_distribution);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Inisialisasi grafik saat halaman dimuat
+    initOrUpdateChart(initialVoteData);
+
+    // Atur interval untuk memuat ulang data setiap tiga puluh detik atau setengah menit (30000 ms)
+    setInterval(updateDashboard, 30000);
 });
 </script>

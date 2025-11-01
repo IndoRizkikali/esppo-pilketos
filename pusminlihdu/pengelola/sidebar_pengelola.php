@@ -41,7 +41,7 @@ $manajemenDataPemilihanPages = ['daftar_konstituensi', 'edit_konstituensi', 'daf
 $konstituensiPages = ['daftar_konstituensi', 'edit_konstituensi'];
 $dptPages = ['daftar_pemilih', 'tambah_pemilih', 'edit_pemilih'];
 $kandidatPages = ['daftar_kandidat', 'tambah_kandidat', 'edit_kandidat'];
-$laporanPages = ['cetak_dpt', 'cetak_kartu_dpt', 'cetak_panduan_akses', 'cetak_daftar_kandidat', 'cetak_laporan_pemilhan', 'cetak_kehadiran', 'cetak_sse_ljk'];
+$laporanPages = ['cetak_dpt', 'cetak_kartu_dpt', 'cetak_panduan_akses', 'cetak_daftar_kandidat', 'cetak_laporan_pemilihan', 'cetak_kehadiran', 'cetak_sse_ljk'];
 
 ?>
 <!-- Main Sidebar Container -->
@@ -56,7 +56,7 @@ $laporanPages = ['cetak_dpt', 'cetak_kartu_dpt', 'cetak_panduan_akses', 'cetak_d
   <div class="sidebar">
     <!-- Sidebar Menu -->
     <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent nav-legacy" data-widget="treeview" role="menu" data-accordion="false">
         
         <li class="nav-item">
           <a href="index.php?page=dashboard" class="nav-link <?= isMenuItemActive('dashboard', $currentPage) ?>">

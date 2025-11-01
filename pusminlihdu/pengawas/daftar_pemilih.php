@@ -1,6 +1,6 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengawas, Daftar Pemilih
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengawas, Lihat Daftar Pemilih
  * pusminlihdu/pengawas/daftar_pemilih.php
  * 
  * Halaman ini menampilkan daftar pemilih tetap (DPT) yang telah terdaftar.

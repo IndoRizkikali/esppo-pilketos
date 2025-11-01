@@ -1,6 +1,6 @@
 <?php
 /**
- * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengawas, Daftar Konstituensi
+ * e-SPPO - Pusat Administrasi Pemilihan Terpadu (Pusminlihdu) - Pengawas, Lihat Daftar Konstituensi
  * pusminlihdu/pengawas/daftar_konstituensi.php
  * 
  * Daftar konstituensi pemilih yang dikelola oleh panitia pemilihan.

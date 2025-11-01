@@ -1,8 +1,9 @@
 <?php
 /**
  * e-SPPO - Portal Web Publik
- *
  * Halaman Daftar Kandidat
+ * webportal/kandidat.php
+ * 
  * - Menampilkan daftar kandidat yang berpartisipasi dalam pemilihan.
  * - Menyediakan informasi lengkap tentang setiap kandidat, termasuk visi, misi, dan foto.
  *
