@@ -2,18 +2,27 @@
 .vscode/*
 .kiro/*
 
-!assets/imgs/esppo/*
+!assets/imgs/esppo/*.*
 
-assets/imgs/sekolah/*
+assets/imgs/sekolah/*.*
 !assets/imgs/sekolah/placeholder_sekolah.png
 !assets/imgs/sekolah/placeholder_osis.png
-assets/imgs/sse-foto-kandidat/*
+!assets/imgs/sekolah/index.html
+!assets/imgs/sse-foto-kandidat
+assets/imgs/sse-foto-kandidat/*.*
+!assets/imgs/sse-foto-kandidat/index.html
 
+!assets/pdfs/laporan
+!assets/pdfs/laporan/index.html
 assets/pdfs/laporan/*.pdf
+!assets/pdfs/sse-ljk
+!assets/pdfs/sse-ljk/index.html
 assets/pdfs/sse-ljk/*.pdf
 
 assets/spreadsheets/papt-unggah-massal/*.*
+!assets/spreadsheets/papt-unggah-massal/index.html
 !assets/spreadsheets/templat/Templat_Format_Data_Akun_DPT_Pusminlihdu_eSPPO.xltx
+!assets/spreadsheets/templat/index.html
 
 backups/*
 

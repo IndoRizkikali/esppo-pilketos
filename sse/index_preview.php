@@ -269,9 +269,9 @@ $voter_name = "Contoh Pemilih"; // Ganti data pemilih contoh untuk pratayang
                 <h5 class="fw-bold">APLIKASI SURAT SUARA ELEKTRONIK</h5>
             </div>
             <div class="school-info">
-                <img src="../assets/imgs/sekolah/<?= htmlspecialchars($school_config['logo'][0]['logo_sekolah'] ?? 'placeholder_sekolah.png') ?>" alt="Logo Sekolah" class="logo">
+                <img src="../assets/imgs/sekolah/<?= htmlspecialchars($school_config['logo'][0]['logo_sekolah'] ?? 'placeholder_sekolah.png') ?>" onerror="this.onerror=null;this.src='../assets/imgs/sekolah/placeholder_sekolah.png';" alt="Logo Sekolah" class="logo">
                 <span class="school-name text-center mx-3"><?= htmlspecialchars($school_config['nama_sekolah'] ?? 'Nama Sekolah') ?></span>
-                <img src="../assets/imgs/sekolah/<?= htmlspecialchars($school_config['logo'][1]['logo_osis'] ?? 'placeholder_osis.png') ?>" alt="Logo OSIS" class="logo">
+                <img src="../assets/imgs/sekolah/<?= htmlspecialchars($school_config['logo'][1]['logo_osis'] ?? 'placeholder_osis.png') ?>" onerror="this.onerror=null;this.src='../assets/imgs/sekolah/placeholder_osis.png';" alt="Logo OSIS" class="logo">
             </div>
             <div class="voter-info">
                 Pemilih: <strong><?= $voter_name ?></strong>

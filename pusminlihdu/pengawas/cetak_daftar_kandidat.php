@@ -37,7 +37,7 @@ class KANDIDAT_PDF extends TCPDF {
 
     public function Header() {
         $this->Image('../../assets/imgs/esppo/esppo-logo.png', 20, 10, 20, '', 'PNG');
-        $logo_sekolah_path = '../../assets/imgs/sekolah/' . ($this->schoolConfig['logo'][0]['logo_sekolah'] ?? 'placeholder-sekolah.png');
+        $logo_sekolah_path = '../../assets/imgs/sekolah/' . ($this->schoolConfig['logo'][0]['logo_sekolah'] ?? 'placeholder_sekolah.png');
         if (file_exists($logo_sekolah_path)) {
             $this->Image($logo_sekolah_path, $this->getPageWidth() - 30, 8, 20, '');
         }
@@ -131,7 +131,7 @@ if (empty($candidates)) {
         $valueWidth = 120;
         
         // Foto
-        $photo_path = '../../assets/imgs/sse-foto-kandidat/' . ($candidate['foto_kandidat'] ?? 'placeholder-kandidat.png');
+        $photo_path = '../../assets/imgs/sse-foto-kandidat/' . ($candidate['foto_kandidat'] ?? 'placeholder_kandidat.png');
         if (file_exists($photo_path)) {
             $pdf->Image($photo_path, 190, 80, 60, 0);
         }

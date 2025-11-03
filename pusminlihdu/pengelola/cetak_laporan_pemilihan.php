@@ -38,7 +38,7 @@ class ELECTION_PDF extends TCPDF {
 
     public function Header() {
         $this->Image('../../assets/imgs/esppo/esppo-logo.png', 20, 10, 20, '', 'PNG');
-        $logo_sekolah_path = '../../assets/imgs/sekolah/' . ($this->schoolConfig['logo'][0]['logo_sekolah'] ?? 'placeholder-sekolah.png');
+        $logo_sekolah_path = '../../assets/imgs/sekolah/' . ($this->schoolConfig['logo'][0]['logo_sekolah'] ?? 'placeholder_sekolah.png');
         if (file_exists($logo_sekolah_path)) {
             $this->Image($logo_sekolah_path, $this->getPageWidth() - 30, 8, 20, '');
         }

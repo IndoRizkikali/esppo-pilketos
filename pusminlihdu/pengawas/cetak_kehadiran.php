@@ -38,7 +38,7 @@ class ATTENDANCE_PDF extends TCPDF {
 
     public function Header() {
         $this->Image('../../assets/imgs/esppo/esppo-logo.png', 12.5, 10.5, 22.5, '', 'PNG');
-        $logo_sekolah_path = '../../assets/imgs/sekolah/' . ($this->schoolConfig['logo'][0]['logo_sekolah'] ?? 'placeholder-sekolah.png');
+        $logo_sekolah_path = '../../assets/imgs/sekolah/' . ($this->schoolConfig['logo'][0]['logo_sekolah'] ?? 'placeholder_sekolah.png');
         if (file_exists($logo_sekolah_path)) {
             $this->Image($logo_sekolah_path, $this->getPageWidth() - 32.5, 7, 22.5, '');
         }
