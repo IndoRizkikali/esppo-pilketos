@@ -66,9 +66,16 @@ class ELECTION_PDF extends TCPDF {
         $this->Cell($pageWidth / 3, 10, 'Dibuat: ' . date('d/m/Y H:i'), 0, 0, 'R');
     }
 
-    // Fungsi untuk menambahkan halaman tanda tangan
-    public function addSignaturePages($committee_data, $candidates, $supervisor, $principal) {
+    // Fungsi helper untuk menghitung posisi X agar tabel di tengah
+    public function getCenteredTableX($tableWidth) {
         $pageWidth = $this->getPageWidth() - $this->original_lMargin - $this->original_rMargin;
+        return $this->original_lMargin + (($pageWidth - $tableWidth) / 2);
+    }
+
+    // Fungsi untuk menambahkan halaman tanda tangan
+    public function addSignaturePages($committee_data, $candidates, $supervisor, $principal, $election_type = 'BERPASANGAN') {
+        $pageWidth = $this->getPageWidth() - $this->original_lMargin - $this->original_rMargin;
+        
         // Halaman Tanda Tangan Panitia
         $this->AddPage();
         $this->SetFont('helvetica', '', 11);
@@ -77,7 +84,9 @@ class ELECTION_PDF extends TCPDF {
 
         // Ruang tanda tangan panitia (3 orang)
         $positions = ['Ketua Panitia', 'Sekretaris', 'Kepala Tim Teknis'];
-        $col_width = $pageWidth / 3;
+        $col_width = 80;
+        $spacing = ($pageWidth - (3 * $col_width)) / 4;
+        $start_x = $this->original_lMargin + $spacing;
 
         // Header tanda tangan panitia
         $this->SetFont('helvetica', 'B', 12);
@@ -85,85 +94,136 @@ class ELECTION_PDF extends TCPDF {
         $this->SetFont('helvetica', '', 11);
         $this->Ln(5);
         
+        $start_y = $this->GetY();
         foreach($positions as $i => $position) {
-            $x = 15 + ($i * 90);
-            $this->SetX($x);
+            $x = $start_x + ($i * ($col_width + $spacing));
+            $this->SetXY($x, $start_y);
             $this->Cell($col_width, 6, $position, 0, 1, 'C');
             $this->SetX($x);
             $this->Cell($col_width, 35, '', 0, 1, 'C'); // Ruang tanda tangan
             $this->SetX($x);
-            $this->Cell($col_width, 6, '(..........................................................)', 0, 1, 'C');
-            $this->Ln(4);
+            $this->Cell($col_width, 6, '(..................................................)', 0, 1, 'C');
             $this->SetX($x);
-            $this->Cell($col_width, 6, 'NIS. ................................', 0, 1, 'C');
-            $this->SetX($x);
-            $this->SetY($this->GetY() - (6 + 35 + 6 + 4 + 6));
+            $this->Cell($col_width, 6, 'NIS. ..............................', 0, 1, 'C');
         }
 
         // Halaman Tanda Tangan Kandidat
         $this->AddPage();
         $this->SetFont('helvetica', 'B', 12);
         $this->Cell(0, 10, 'Kandidat/Saksi Kandidat', 0, 1, 'C');
-        $this->SetFont('helvetica', '', 11);
+        $this->SetFont('helvetica', '', 10);
         $this->Ln(5);
 
-        // Tanda tangan kandidat (3 per baris)
-        foreach(array_chunk($candidates, 3) as $pair) {
-            foreach($pair as $i => $candidate) {
-                $x = 15 + ($i * 90);
-                $this->SetX($x);
-                $this->Cell($col_width, 6, 'Kandidat Nomor Urut ' . $candidate['no_urut_kandidat'], 0, 1, 'C');
-                $this->SetX($x);
+        // Tanda tangan kandidat (2 per baris untuk pasangan, 3 per baris untuk tunggal)
+        $candidates_per_row = ($election_type === 'BERPASANGAN') ? 2 : 3;
+        $col_width = ($election_type === 'BERPASANGAN') ? 120 : 80;
+        $spacing = ($pageWidth - ($candidates_per_row * $col_width)) / ($candidates_per_row + 1);
+        $start_x = $this->original_lMargin + $spacing;
+        
+        foreach(array_chunk($candidates, $candidates_per_row) as $row_candidates) {
+            $start_y = $this->GetY();
+            $max_height = 0;
+            
+            foreach($row_candidates as $i => $candidate) {
+                $x = $start_x + ($i * ($col_width + $spacing));
+                $this->SetXY($x, $start_y);
+                
+                // Nomor urut kandidat
+                $this->SetFont('helvetica', 'B', 10);
+                $this->Cell($col_width, 6, 'Kandidat Nomor Urut ' . $candidate['no_urut_kandidat'], 0, 2, 'C');
+                
+                // Nama kandidat (menggunakan MultiCell untuk nama panjang)
+                $this->SetFont('helvetica', '', 9);
                 $nama = $candidate['nama_calon_1'];
                 if (!empty($candidate['nama_calon_2'])) {
                     $nama .= ' & ' . $candidate['nama_calon_2'];
                 }
-                $this->Cell($col_width, 6, $nama, 0, 1, 'C');
-                $this->Cell($col_width, 20, '', 0, 1, 'C');
-                $this->SetY($this->GetY() - (6 + 6 + 20));
+                
+                $this->SetX($x);
+                $name_start_y = $this->GetY();
+                $this->MultiCell($col_width, 5, $nama, 0, 'C', false, 1, $x);
+                $name_height = $this->GetY() - $name_start_y;
+                
+                // Ruang tanda tangan
+                $this->SetX($x);
+                $this->Cell($col_width, 25, '', 0, 2, 'C');
+                
+                // Garis tanda tangan
+                $this->SetX($x);
+                $line_padding = ($col_width - 80) / 2;
+                $this->Line($x + $line_padding, $this->GetY(), $x + $col_width - $line_padding, $this->GetY());
+                $this->Ln(2);
+                
+                $current_height = $this->GetY() - $start_y;
+                if ($current_height > $max_height) {
+                    $max_height = $current_height;
+                }
             }
-            $this->SetY($this->GetY() + 50);
-            $this->Ln(10);
+            
+            $this->SetY($start_y + $max_height + 15);
+            
+            // Cek apakah perlu halaman baru
+            if ($this->GetY() > 160) {
+                $this->AddPage();
+                $this->SetFont('helvetica', 'B', 12);
+                $this->Cell(0, 10, 'Kandidat/Saksi Kandidat (Lanjutan)', 0, 1, 'C');
+                $this->Ln(5);
+            }
         }
 
-        // Halaman Tanda Tangan Mengetahui
+        // Halaman Tanda Tangan Pengesahan
         $this->AddPage();
         $this->SetFont('helvetica', 'B', 14);
         $this->Cell(0, 10, 'LEMBAR PENGESAHAN', 0, 1, 'C');
-        $this->Ln(10);
+        $this->Ln(15);
 
-        // Kolom tanda tangan pengesahan
-        $this->SetFont('helvetica', '', 11);
-        $col_width = $pageWidth / 2;
+        // Kolom tanda tangan pengesahan (2 kolom sejajar)
+        $col_width = ($pageWidth - 40) / 2;
+        $left_x = $this->original_lMargin + 10;
+        $right_x = $this->original_lMargin + $col_width + 30;
         
-        // Pembina/Pengawas
-        $this->SetY($this->GetY() + 5 + 4);
-        $this->SetX(30);
-        $this->Cell($col_width, 6, $supervisor['jabatan_pejabat_sekolah'], 0, 1, 'C');
-        $this->SetX(30);
-        $this->Cell($col_width, 35, '', 0, 1, 'C'); // Ruang tanda tangan
-        $this->SetX(30);
-        $this->Cell($col_width, 6, $supervisor['nama_pejabat_sekolah'], 0, 1, 'C');
-        if ($supervisor['nip_pejabat_sekolah']) {
-            $this->SetX(30);
+        $start_y = $this->GetY();
+        
+        // SISI KIRI: Pembina/Pengawas
+        $this->SetFont('helvetica', '', 11);
+        $this->SetXY($left_x, $start_y);
+        
+        $jabatan = $supervisor['jabatan_pejabat_sekolah'] ?? 'Pembina OSIS';
+        $this->MultiCell($col_width, 6, $jabatan, 0, 'C', false, 1, $left_x);
+        
+        $this->SetX($left_x);
+        $this->Cell($col_width, 40, '', 0, 1, 'C');
+        
+        $this->SetX($left_x);
+        $this->SetFont('helvetica', 'B', 11);
+        $nama_supervisor = $supervisor['nama_pejabat_sekolah'] ?? '..........................................';
+        $this->Cell($col_width, 6, $nama_supervisor, 0, 1, 'C');
+        
+        $this->SetFont('helvetica', '', 11);
+        if (!empty($supervisor['nip_pejabat_sekolah'])) {
+            $this->SetX($left_x);
             $this->Cell($col_width, 6, 'NIP. ' . $supervisor['nip_pejabat_sekolah'], 0, 1, 'C');
-            $this->SetY($this->GetY() - 6 - 5 - (6 + 35 + 6 + 6));
-        } else {
-            $this->SetY($this->GetY() - 6 - 5 - (6 + 35 + 6));
         }
-
-        // Kepala Sekolah
-        $this->SetX(140);
+        
+        // SISI KANAN: Kepala Sekolah
+        $this->SetXY($right_x, $start_y - 6);
+        $this->SetFont('helvetica', '', 11);
         $this->Cell($col_width, 6, 'Mengetahui dan Mengesahkan,', 0, 1, 'C');
-        $this->Ln(5);
-        $this->SetX(140);
-        $this->Cell($col_width, 6, 'Kepala ' . $this->schoolConfig['nama_sekolah'], 0, 1, 'C');
-        $this->SetX(140);
-        $this->Cell($col_width, 35, '', 0, 1, 'C'); // Ruang tanda tangan
-        $this->SetX(140);
-        $this->Cell($col_width, 6, $principal['nama'], 0, 1, 'C');
-        if ($principal['nip']) {
-            $this->SetX(140);
+        
+        $this->SetX($right_x);
+        $this->MultiCell($col_width, 6, 'Kepala ' . ($this->schoolConfig['nama_sekolah'] ?? 'Sekolah'), 0, 'C', false, 1, $right_x);
+        
+        $this->SetX($right_x);
+        $this->Cell($col_width, 40, '', 0, 1, 'C');
+        
+        $this->SetX($right_x);
+        $this->SetFont('helvetica', 'B', 11);
+        $nama_kepsek = $principal['nama'] ?? '..........................................';
+        $this->Cell($col_width, 6, $nama_kepsek, 0, 1, 'C');
+        
+        $this->SetFont('helvetica', '', 11);
+        if (!empty($principal['nip'])) {
+            $this->SetX($right_x);
             $this->Cell($col_width, 6, 'NIP. ' . $principal['nip'], 0, 1, 'C');
         }
     }
@@ -267,7 +327,7 @@ try {
 }
 
 // -----------------------------------------------------------------------------
-// 4. PEMBUATAN DOKUMEN PDF
+// 4. PEMBUATAN DOKUMEN PDF - Dengan tabel centered
 // -----------------------------------------------------------------------------
 
 $pdf = new ELECTION_PDF('L', 'mm', 'A4');
@@ -387,11 +447,11 @@ $pdf->SetFont('helvetica', 'B', 14);
 $pdf->Cell(0, 10, 'HASIL PEROLEHAN SUARA KESELURUHAN', 0, 1, 'C');
 $pdf->Ln(5);
 
-// Statistik DPT dan Partisipasi
+// Statistik DPT dan Partisipasi - CENTERED
 $pdf->SetFont('helvetica', '', 10);
 $stats_table = [
     ['Daftar Pemilih Tetap (DPT)', $voter_stats['male_voters'], $voter_stats['female_voters'], $voter_stats['total_voters']],
-    ['Pemilih yang Menggunakan Hak Pilih', $voter_stats['male_votes'], $voter_stats['female_votes'], $voter_stats['voted']],
+    ['Pemilih yang Menggunakan Hak Pilih', $voter_stats['male_votes'] ?? 0, $voter_stats['female_votes'] ?? 0, $voter_stats['voted']],
     ['Tingkat Partisipasi (%)', 
         number_format($percent_attend_men, 1),
         number_format($percent_attend_women, 1),
@@ -399,7 +459,11 @@ $stats_table = [
     ]
 ];
 
-$w = [80, 50, 50, 50];
+$w = [100, 50, 50, 50];
+$table_width = array_sum($w);
+$table_x = $pdf->getCenteredTableX($table_width);
+
+$pdf->SetX($table_x);
 $pdf->SetFillColor(220, 220, 220);
 $pdf->Cell($w[0], 7, 'Uraian', 1, 0, 'C', true);
 $pdf->Cell($w[1], 7, 'Laki-laki', 1, 0, 'C', true);
@@ -407,6 +471,7 @@ $pdf->Cell($w[2], 7, 'Perempuan', 1, 0, 'C', true);
 $pdf->Cell($w[3], 7, 'Total', 1, 1, 'C', true);
 
 foreach($stats_table as $row) {
+    $pdf->SetX($table_x);
     $pdf->Cell($w[0], 7, $row[0], 1, 0, 'L');
     $pdf->Cell($w[1], 7, $row[1], 1, 0, 'C');
     $pdf->Cell($w[2], 7, $row[2], 1, 0, 'C');
@@ -414,15 +479,18 @@ foreach($stats_table as $row) {
 }
 $pdf->Ln(10);
 
-// Tabel Perolehan Suara
+// Tabel Perolehan Suara - CENTERED
 $pdf->SetFont('helvetica', 'B', 12);
 $pdf->Cell(0, 8, 'Rincian Perolehan Suara per Kandidat:', 0, 1, 'C');
 $pdf->Ln(2);
 
 $pdf->SetFont('helvetica', '', 10);
 $header = ['No. Urut', 'Nama Calon', 'Jumlah Suara', 'Persentase'];
-$w = [25, 140, 35, 30];
+$w = [25, 150, 40, 35];
+$table_width = array_sum($w);
+$table_x = $pdf->getCenteredTableX($table_width);
 
+$pdf->SetX($table_x);
 $pdf->SetFillColor(220, 220, 220);
 foreach($header as $i => $h) {
     $pdf->Cell($w[$i], 7, $h, 1, 0, 'C', true);
@@ -433,6 +501,7 @@ foreach($vote_results as $row) {
     $percentage = ($voter_stats['voted'] > 0) ? 
         ($row['total_votes'] / $voter_stats['voted'] * 100) : 0;
     
+    $pdf->SetX($table_x);
     $pdf->Cell($w[0], 7, $row['no_urut_kandidat'], 1, 0, 'C');
     $nama_kandidat = $election['tipe_peserta_pemilihan'] === 'BERPASANGAN' ?
         $row['nama_calon_1'] . ' & ' . $row['nama_calon_2'] :
@@ -443,7 +512,7 @@ foreach($vote_results as $row) {
     $pdf->Ln();
 }
 
-// Halaman 3: Hasil per Konstituensi
+// Halaman 3: Hasil per Konstituensi - CENTERED
 $pdf->AddPage('L');
 $pdf->SetFont('helvetica', 'B', 14);
 $pdf->Cell(0, 10, 'RINCIAN PEROLEHAN SUARA PER KONSTITUENSI', 0, 1, 'C');
@@ -468,15 +537,19 @@ foreach($constituency_results as $result) {
     $const_data[$key]['results'][$result['no_urut_kandidat']][$result['jk_pemilih']] = $result['votes'];
 }
 
-// Print constituency results
+// Print constituency results - CENTERED
 $pdf->SetFont('helvetica', '', 10);
+$w = [25, 110, 40, 40, 40];
+$table_width = array_sum($w);
+$table_x = $pdf->getCenteredTableX($table_width);
+
 foreach($const_data as $kode => $const) {
     $pdf->SetFont('helvetica', 'B', 11);
-    $pdf->Cell(0, 8, $const['nama'] . ' - ' . $const['tipe'], 0, 1, 'L');
+    $pdf->Cell(0, 8, $const['nama'] . ' (' . $const['tipe'] . ')', 0, 1, 'C');
     $pdf->SetFont('helvetica', '', 10);
     
-    // Header
-    $w = [25, 100, 35, 35, 35];
+    // Header - CENTERED
+    $pdf->SetX($table_x);
     $pdf->SetFillColor(220, 220, 220);
     $pdf->Cell($w[0], 7, 'No. Urut', 1, 0, 'C', true);
     $pdf->Cell($w[1], 7, 'Nama Kandidat', 1, 0, 'C', true);
@@ -490,15 +563,16 @@ foreach($const_data as $kode => $const) {
         });
         $candidate = reset($candidate);
         
-        $total = $votes['PRIA'] + $votes['WANITA'];
+        $total = ($votes['PRIA'] ?? 0) + ($votes['WANITA'] ?? 0);
         
+        $pdf->SetX($table_x);
         $pdf->Cell($w[0], 7, $no_urut, 1, 0, 'C');
         $nama_kandidat = $election['tipe_peserta_pemilihan'] === 'BERPASANGAN' ?
             $candidate['nama_calon_1'] . ' & ' . $candidate['nama_calon_2'] :
             $candidate['nama_calon_1'];
         $pdf->Cell($w[1], 7, $nama_kandidat, 1, 0, 'L');
-        $pdf->Cell($w[2], 7, $votes['PRIA'], 1, 0, 'C');
-        $pdf->Cell($w[3], 7, $votes['WANITA'], 1, 0, 'C');
+        $pdf->Cell($w[2], 7, $votes['PRIA'] ?? 0, 1, 0, 'C');
+        $pdf->Cell($w[3], 7, $votes['WANITA'] ?? 0, 1, 0, 'C');
         $pdf->Cell($w[4], 7, $total, 1, 1, 'C');
     }
     $pdf->Ln(7);
@@ -515,11 +589,12 @@ $committee = [
     ['nama' => '', 'jabatan' => 'Kepala Tim Teknis']
 ];
 
-$pdf->addSignaturePages($committee, $vote_results, $supervisor, $principal);
+$pdf->addSignaturePages($committee, $vote_results, $supervisor, $principal, $election['tipe_peserta_pemilihan']);
 
 // -----------------------------------------------------------------------------
 // 5. OUTPUT KE BROWSER
 // -----------------------------------------------------------------------------
+
 $filename = 'laporan_pemilihan_' . time() . '.pdf';
 $pdf_web_path = '../../assets/pdfs/laporan/' . $filename;
 $pdf_server_path = realpath(__DIR__ . '/../../assets/pdfs/laporan') . DIRECTORY_SEPARATOR . $filename;
@@ -534,16 +609,35 @@ try {
 }
 ?>
 
+<!-- PDF.js Library -->
+<script src="../../vendor/clean-composer-packages/pdf-js/build/pdf.mjs" type="module"></script>
+<script src="../../assets/js/pdfjs-viewer.js"></script>
+
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Pratayang Laporan Pelaksanaan dan Hasil Pemilihan</h3>
     </div>
     <div class="card-body">
-        <iframe src="<?= htmlspecialchars($pdf_web_path) ?>" height="800" width="100%" style="border:none;" allowfullscreen></iframe>
+        <div id="pdf-viewer-container"></div>
+        <noscript>
+            <iframe src="<?= htmlspecialchars($pdf_web_path) ?>" height="800" width="100%" style="border:none;" allowfullscreen></iframe>
+        </noscript>
     </div>
     <div class="card-footer">
         <a href="<?= htmlspecialchars($pdf_web_path) ?>" class="btn btn-success" download>
             <i class="fas fa-file-download"></i> Unduh Laporan (PDF)
         </a>
+        <a href="<?= htmlspecialchars($pdf_web_path) ?>" class="btn btn-secondary" target="_blank">
+            <i class="fas fa-external-link-alt"></i> Buka di Tab Baru
+        </a>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    ESPPOPDFViewer.init('pdf-viewer-container', '<?= htmlspecialchars($pdf_web_path) ?>', {
+        height: 800,
+        workerSrc: '../../vendor/clean-composer-packages/pdf-js/build/pdf.worker.mjs',
+    });
+});
+</script>

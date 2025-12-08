@@ -237,16 +237,35 @@ try {
 }
 ?>
 
+<!-- PDF.js Library -->
+<script src="../../vendor/clean-composer-packages/pdf-js/build/pdf.mjs" type="module"></script>
+<script src="../../assets/js/pdfjs-viewer.js"></script>
+
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Pratayang Panduan Akses</h3>
     </div>
     <div class="card-body">
-        <iframe src="<?= htmlspecialchars($pdf_web_path) ?>" height="800" width="100%" style="border:none;" allowfullscreen></iframe>
+        <div id="pdf-viewer-container"></div>
+        <noscript>
+            <iframe src="<?= htmlspecialchars($pdf_web_path) ?>" height="800" width="100%" style="border:none;" allowfullscreen></iframe>
+        </noscript>
     </div>
     <div class="card-footer">
         <a href="<?= htmlspecialchars($pdf_web_path) ?>" class="btn btn-success" download>
             <i class="fas fa-file-download"></i> Unduh Panduan (PDF)
         </a>
+        <a href="<?= htmlspecialchars($pdf_web_path) ?>" class="btn btn-secondary" target="_blank">
+            <i class="fas fa-external-link-alt"></i> Buka di Tab Baru
+        </a>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    ESPPOPDFViewer.init('pdf-viewer-container', '<?= htmlspecialchars($pdf_web_path) ?>', {
+        height: 800,
+        workerSrc: '../../vendor/clean-composer-packages/pdf-js/build/pdf.worker.mjs'
+    });
+});
+</script>

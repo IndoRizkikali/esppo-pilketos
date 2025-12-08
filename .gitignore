@@ -30,8 +30,10 @@ confs/crypto_config.yml
 confs/db_config.yml
 confs/school_config.yml
 
-docs/markdown/*
-docs/latex/*
+!docs/markdown/*
+!docs/markdown/sse_guide.md
+!docs/markdown/pusminlihdu_guide.md
+!docs/latex/*
 !docs/latex/main.pdf
 !docs/latex/main.tex
 !docs/latex/TeX_files/*.tex
